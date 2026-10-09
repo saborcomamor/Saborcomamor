@@ -1,0 +1,69 @@
+/* PWA install invitation — nonmodal bottom sheet, visible only once per 14 days. */
+.pwa-install-card{
+ position:fixed;z-index:925;left:50%;bottom:max(16px,env(safe-area-inset-bottom));
+ transform:translateX(-50%);
+ width:min(calc(100vw - 28px),440px);max-height:min(82svh,600px);
+ overflow-y:auto;overscroll-behavior:contain;
+ border:1px solid rgba(131,88,62,.22);border-radius:21px;
+ padding:clamp(18px,4.2vw,25px);
+ background:rgba(255,250,244,.985);color:#423027;
+ box-shadow:0 24px 65px rgba(33,20,12,.24),0 5px 18px rgba(33,20,12,.10);
+ animation:pwa-card-enter .55s cubic-bezier(.2,.86,.25,1) both;
+}
+.pwa-install-top{display:flex;align-items:center;gap:13px}
+.pwa-install-appicon{
+ width:61px;height:61px;flex:0 0 61px;object-fit:cover;border-radius:16px;
+ box-shadow:0 4px 12px rgba(64,39,30,.16);
+}
+.pwa-install-title-group{min-width:0;flex:1}
+.pwa-install-eyebrow{
+ display:block;margin-bottom:4px;font-size:.59rem;line-height:1.4;
+ font-weight:700;letter-spacing:.15em;color:#aa755b;
+}
+.pwa-install-title-group h2{
+ font:400 clamp(1.45rem,5vw,1.95rem)/1.1 var(--serif);
+ letter-spacing:-.045em;
+}
+.pwa-install-title-group h2 em{color:#b87655;font-style:italic}
+.pwa-install-close{
+ align-self:flex-start;display:grid;place-items:center;
+ flex:0 0 31px;width:31px;height:31px;padding:0;
+ border:0;border-radius:50%;background:transparent;color:#61473b;
+}
+.pwa-install-card>p{margin:14px 0 17px;font-size:.84rem;line-height:1.6;color:#796557}
+.pwa-install-buttons{display:flex;gap:9px;align-items:center}
+.pwa-install-primary{
+ flex:1;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+ min-width:0;min-height:49px;padding:12px 15px;border:0;border-radius:13px;
+ color:#fff;background:#583c30;font-size:.87rem;font-weight:700;
+}
+.pwa-install-primary:hover{background:#442e26}
+.pwa-install-later{
+ flex:0 0 auto;min-height:49px;padding:10px 12px;
+ border:1px solid #d7c3af;border-radius:13px;color:#5d4438;
+ background:transparent;font-size:.8rem;font-weight:650;
+}
+.pwa-install-card button:focus-visible{outline:3px solid #b87655;outline-offset:3px}
+.pwa-install-help{
+ background:#f5e9de;border-radius:12px;margin-top:14px;
+ padding:14px 15px;font-size:.82rem;color:#564135;
+}
+.pwa-install-help>strong{font-weight:700}
+.pwa-install-help p{margin-top:6px;line-height:1.55}
+.pwa-install-help p svg{display:inline;vertical-align:-2px}
+.pwa-install-help button{
+ display:inline-flex;align-items:center;gap:8px;background:transparent;
+ border:0;border-bottom:1px solid #9f765c;color:#583c30;
+ padding:8px 0;font-weight:650;font-size:.77rem;
+}
+@keyframes pwa-card-enter{
+ from{opacity:0;transform:translate(-50%,22px) scale(.97)}
+ to{opacity:1;transform:translate(-50%,0) scale(1)}
+}
+@media(max-width:365px){
+ .pwa-install-appicon{width:53px;height:53px;flex-basis:53px}
+ .pwa-install-title-group h2{font-size:1.38rem}
+ .pwa-install-primary{font-size:.8rem;padding:10px}
+ .pwa-install-later{font-size:.76rem;padding:10px}
+}
+@media(prefers-reduced-motion:reduce){.pwa-install-card{animation:none}}

@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
       { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
       ...(process.env.NODE_ENV === "production" ? [{ key: "Content-Security-Policy", value: `default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: blob: https://images.unsplash.com ${supabaseOrigin}; font-src 'self' data: https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' ${supabaseOrigin} ${supabaseHost ? `wss://${supabaseHost}` : ''}; upgrade-insecure-requests` }] : [])
     ];
-    return [{ source: "/:path*", headers: security }];
+    return [{ source: "/:path*", headers: security },{ source: "/sw.js", headers:[{ key:"Cache-Control", value:"no-cache, max-age=0" }] }];
   }
 };
 export default nextConfig;
