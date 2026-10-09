@@ -160,7 +160,7 @@ export function AdminSiteMedia(){
       </label>}
       <p><b>Ao salvar:</b> somente {selected.label.toLowerCase()} da seção {selected.section} será alterada.</p>
     </div>
-    {chosen&&<div className="cms-selected"><div className="cms-selected-preview"><img src={storageUrl(chosen.published_storage_path)} alt={chosen.alt_text}/>{mediaSlotPresentation(selected).overlay&&caption.trim()&&<b>{caption}</b>}</div><p><b>Prévia da fotografia selecionada</b><span>{mediaSlotPresentation(selected).overlay?caption.trim()||"Sem texto sobre a imagem":"Sem legenda sobre a foto"} · {chosen.alt_text}</span></p></div>
+    {chosen&&<div className="cms-selected"><div className="cms-selected-preview"><img src={storageUrl(chosen.published_storage_path)} alt={chosen.alt_text}/>{mediaSlotPresentation(selected).overlay&&caption.trim()&&<b>{caption}</b>}</div><p><b>Prévia da fotografia selecionada</b><span>{mediaSlotPresentation(selected).overlay?caption.trim()||"Sem texto sobre a imagem":"Sem legenda sobre a foto"} · {chosen.alt_text}</span></p></div>}
     <div className="cms-dialog-footer"><button type="button" className="cms-cancel" onClick={()=>setSelectedSlot(null)}>Cancelar</button>
      <button type="button" disabled={!choice||!!busy} onClick={()=>void saveSelection()}>{busy?"Salvando…":"Usar nesta posição"}</button></div>
     {feedback&&<p className="cms-feedback" role="alert">{feedback}</p>}
