@@ -209,8 +209,11 @@ export function AdminPhotos() {
             <img className="admin-photo-thumb" src={item.preview} alt={"Prévia " + (index + 1)} loading="lazy"/>
             <div className="admin-photo-fields">
               <div className="admin-photo-item-title"><strong>{item.file.name}</strong><span>{(item.file.size / 1024 / 1024).toFixed(1)} MB</span></div>
-              <label>Descrição da foto<input value={item.alt} maxLength={250} minLength={3} required disabled={pending || item.status === "done"} onChange={e => changePhoto(item.id, "alt", e.target.value)}/></label>
-              <label>Legenda (opcional)<input value={item.caption} maxLength={180} disabled={pending || item.status === "done"} onChange={e => changePhoto(item.id, "caption", e.target.value)} placeholder="Ex.: Um dia cheio de amor"/></label>
+              <details className="admin-photo-extra">
+                <summary>Editar descrição e legenda (opcional)</summary>
+                <label>Descrição acessível da foto<input value={item.alt} maxLength={250} minLength={3} required disabled={pending || item.status === "done"} onChange={e => changePhoto(item.id, "alt", e.target.value)}/></label>
+                <label>Legenda que aparece na galeria (opcional)<input value={item.caption} maxLength={180} disabled={pending || item.status === "done"} onChange={e => changePhoto(item.id, "caption", e.target.value)} placeholder="Ex.: Um dia cheio de amor"/></label>
+              </details>
               <div className="admin-photo-item-footer"><small role="status">{item.status === "ready" ? "Pronta" : item.status === "uploading" ? "Enviando…" : item.status === "done" ? "✓ Enviada" : "Erro: " + (item.error ?? "")}</small>
                 {item.status !== "done" && <button className="admin-subtle-button" type="button" disabled={pending} onClick={() => removePhoto(item.id)}>Remover</button>}
               </div>
