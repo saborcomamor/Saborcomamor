@@ -1,0 +1,28 @@
+/* Portfólio de fotografia editorial: imagens, movimento e espaços de respiro */
+.public-gallery{padding:0 0 clamp(70px,9vw,140px);background:#faf6f0;min-height:60dvh}
+.photographer-gallery{width:100%;overflow:hidden}
+.gallery-editorial-stage{position:relative;padding:clamp(24px,5vw,70px) clamp(12px,4vw,70px) clamp(35px,5vw,60px);background:radial-gradient(ellipse at 50% 25%,#fffdf9,#ede2d5);touch-action:pan-y}
+.gallery-editorial-spread{max-width:1500px;margin:auto;display:flex;justify-content:center;align-items:center;gap:clamp(10px,3vw,45px)}
+.gallery-main-image,.gallery-side{position:relative;display:block;border:0;background:#e9dacc;overflow:hidden;padding:0;border-radius:3px}
+.gallery-main-image{height:clamp(420px,68svh,780px);flex:1 1 66%;min-width:0;box-shadow:0 27px 55px #4c322621}
+.gallery-main-image img,.gallery-side img,.gallery-film-photo img,.gallery-editorial-tile img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.9,.3,1)}
+.gallery-main-image img{animation:gallery-breath 10s ease-in-out alternate infinite}
+.gallery-main-image:hover img{transform:scale(1.03)}
+.gallery-side{height:clamp(235px,38svh,500px);flex:0 1 15%;min-width:0;box-shadow:0 15px 30px #46302424;opacity:.82;transition:opacity .3s,transform .5s}
+.gallery-side:hover{opacity:1;transform:translateY(-8px)}
+.gallery-stage-controls{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:16px}
+.gallery-stage-controls button{border:1px solid #694e3d;border-radius:50%;background:transparent;color:#513c31;display:grid;place-items:center;width:43px;height:43px}
+.gallery-film-window{margin:clamp(25px,6vw,85px) 0;overflow:hidden}
+.gallery-film-track{width:max-content;display:flex;gap:10px;animation:gallery-film 52s linear infinite;will-change:transform}
+.gallery-film-window:hover .gallery-film-track,.gallery-film-window:focus-within .gallery-film-track{animation-play-state:paused}
+.gallery-film-photo{flex:0 0 clamp(155px,23vw,350px);height:clamp(170px,25vw,300px);border:0;padding:0;background:#e1d2c3;overflow:hidden;border-radius:2px}
+.gallery-film-photo:hover img{transform:scale(1.045)}
+.gallery-photo-editorial{width:min(calc(100% - 22px),1350px);margin:clamp(40px,7vw,95px) auto 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:clamp(105px,10vw,185px);gap:clamp(7px,1.1vw,16px)}
+.gallery-editorial-tile{padding:0;border:0;background:#e6d5c5;overflow:hidden;min-width:0;border-radius:2px;grid-row:span 2}
+.gallery-editorial-tile.tile-0,.gallery-editorial-tile.tile-5{grid-row:span 3;grid-column:span 2}
+.gallery-editorial-tile.tile-2,.gallery-editorial-tile.tile-6{grid-row:span 3}
+.gallery-editorial-tile:hover img{transform:scale(1.065)}
+@keyframes gallery-film{to{transform:translateX(-50%)}}
+@keyframes gallery-breath{to{transform:scale(1.035)}}
+@media(max-width:700px){.gallery-editorial-stage{padding:14px 12px 72px}.gallery-side{display:none}.gallery-main-image{height:clamp(410px,72svh,700px);flex:1 1 100%}.gallery-stage-controls{bottom:16px}.gallery-photo-editorial{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:clamp(105px,25vw,160px);gap:8px}.gallery-editorial-tile.tile-0,.gallery-editorial-tile.tile-5{grid-column:span 1}.gallery-film-photo{flex-basis:170px;height:196px}.gallery-film-window{margin:35px 0}.gallery-film-track{gap:7px}}
+@media(prefers-reduced-motion:reduce){.gallery-film-track,.gallery-main-image img{animation:none!important}.gallery-editorial-tile img,.gallery-side{transition:none!important}}

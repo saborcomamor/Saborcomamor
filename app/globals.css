@@ -2,6 +2,8 @@
 @import "../styles/Base.css";
 @import "../styles/Header.css";
 @import "../styles/home/SplashIntro.css";
+@import "../styles/home/PhotoIntro.css";
+@import "../styles/home/HomeWave.css";
 @import "../styles/home/CinematicHero.css";
 @import "../styles/home/WarmWelcome.css";
 @import "../styles/home/ExpandableServices.css";
@@ -15,6 +17,7 @@
 @import "../styles/home/FinalInvitation.css";
 @import "../styles/Footer.css";
 @import "../styles/Pages.css";
+@import "../styles/gallery/Portfolio.css";
 @import "../styles/Quote.css";
 @import "../styles/Legal.css";
 @import "../styles/Responsive.css";
