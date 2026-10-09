@@ -11,5 +11,5 @@ export function useSiteMedia(){return useContext(Context);}
 export function resolveSitePhoto(items:MediaAssignments, slot:string|undefined, fallback:SitePhoto):SitePhoto {
   if(!slot) return fallback;
   const match=items[slot];
-  return match ? { ...fallback, id:slot, src:match.src, alt:match.alt, label:match.label||fallback.label } : fallback;
+  return match ? { ...fallback, id:slot, src:match.src, alt:match.alt, label:match.label } : fallback;
 }
