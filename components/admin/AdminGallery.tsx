@@ -94,6 +94,7 @@ export function AdminGallery(){
  if(loading)return <section className="app-page"><p role="status">Carregando galeria…</p></section>;
  return <section className="app-page" aria-labelledby="gallery-title">
   <div className="app-page-top"><h2 id="gallery-title">Galeria</h2><span>{selected.length} selecionada(s)</span></div>
+  <p className="app-gallery-editor-hint">A primeira foto é o destaque inicial do carrossel 3D. Você pode escolher outra capa ou mudar a ordem abaixo.</p>
   <div className="app-gallery-actions">
    <button type="button" onClick={()=>{setSelected(photos.filter(x=>!!x.published_storage_path).map(x=>({photo_id:x.id,...defaultFrame()})));setConfirmEmpty(false);}}>Todas</button>
    <button type="button" onClick={()=>{setSelected([]);setConfirmEmpty(false);}}>Limpar seleção</button>
@@ -116,9 +117,13 @@ export function AdminGallery(){
       <img src={img(p.published_storage_path)} alt={p.alt_text} loading="lazy"/>
       {pos>=0&&<span className="app-tile-count"><Check size={14}/> {pos+1}</span>}
      </button>
-     {pos>=0&&<button type="button" className="app-frame-button" aria-label={"Ajustar enquadramento de "+p.alt_text} onClick={()=>setEditor(p.id)}>
-      <SlidersHorizontal size={14}/> Ajustar
-     </button>}
+     {pos>=0&&<div className="app-gallery-item-tools">
+      <button type="button" className="app-frame-button" aria-label={"Ajustar enquadramento de "+p.alt_text} onClick={()=>setEditor(p.id)}>
+       <SlidersHorizontal size={14}/> Ajustar
+      </button>
+      {pos===0?<span className="app-gallery-cover-indicator">Capa</span>:
+       <button type="button" className="app-gallery-cover-action" onClick={()=>move(pos,0)} aria-label={"Definir "+p.alt_text+" como capa do carrossel"}>Definir capa</button>}
+     </div>}
     </div>;
    })}
   </div>
