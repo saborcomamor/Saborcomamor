@@ -32,3 +32,10 @@ export async function getIntroFrames():Promise<IntroFrame[]>{
   src:url+"/storage/v1/object/public/sabor-publicadas/"+r.published_storage_path.split("/").map(encodeURIComponent).join("/")
  }));
 }
+
+export type VisualSettings={keepsakes_font:"caveat"|"dancing"|"allura";favicon_path:string;favicon_version:string};
+export const defaultVisual:VisualSettings={keepsakes_font:"caveat",favicon_path:"",favicon_version:""};
+export async function getVisualSettings():Promise<VisualSettings>{
+ const rows=await getRows<VisualSettings>("visual_settings","select=keepsakes_font,favicon_path,favicon_version&id=eq.1&limit=1");
+ return {...defaultVisual,...rows[0]};
+}

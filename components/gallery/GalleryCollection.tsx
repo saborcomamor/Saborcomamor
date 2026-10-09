@@ -1,70 +1,59 @@
 "use client";
 import {useEffect,useRef,useState} from "react";
-import {ChevronLeft,ChevronRight} from "lucide-react";
-import type {SitePhoto} from "@/lib/photos";
-import {Lightbox} from "@/components/ui/Lightbox";
-/** Portfólio editorial sem filtros, textos sobre as imagens ou contagem visível. */
-export function GalleryCollection({items}:{items:SitePhoto[]}){
+import {ChevronLeft,ChevronRight,Images,Pause,Play} from "lucide-react";
+import type {GalleryPhoto} from "@/lib/gallery-types";
+import {GalleryTiltedPicker} from "./GalleryTiltedPicker";
+/** One fullscreen photographic slide at a time: no filmstrip duplication or mosaic fallback. */
+export function GalleryCollection({items}:{items:GalleryPhoto[]}){
  const [active,setActive]=useState(0);
- const [lightbox,setLightbox]=useState<number|null>(null);
- const [visible,setVisible]=useState(true);
  const [paused,setPaused]=useState(false);
- const stage=useRef<HTMLDivElement>(null);
+ const [visible,setVisible]=useState(true);
+ const [thumbs,setThumbs]=useState(false);
+ const stage=useRef<HTMLElement>(null);
  const pointer=useRef<number|null>(null);
- const swiped=useRef(false);
+ const swipe=useRef(false);
  const count=items.length;
- const go=(delta:number)=>setActive(v=>(v+delta+count)%count);
+ const go=(direction:number)=>setActive(i=>(i+direction+count)%count);
  useEffect(()=>{
   if(!stage.current)return;
-  const observer=new IntersectionObserver(([entry])=>setVisible(entry.isIntersecting),{threshold:.2});
-  observer.observe(stage.current);
-  return()=>observer.disconnect();
+  const observer=new IntersectionObserver(([entry])=>setVisible(entry.isIntersecting),{threshold:.25});
+  observer.observe(stage.current);return()=>observer.disconnect();
  },[]);
  useEffect(()=>{
-  if(count<2||paused||!visible||window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  const interval=window.setInterval(()=>setActive(v=>(v+1)%count),5700);
-  return()=>window.clearInterval(interval);
- },[count,paused,visible]);
+  if(count<2||paused||!visible||thumbs||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const id=window.setInterval(()=>setActive(i=>(i+1)%count),7200);
+  return()=>window.clearInterval(id);
+ },[count,paused,visible,thumbs]);
  if(!items.length)return null;
- const main=items[active];
- const previewLeft=items[(active-1+count)%count];
- const previewRight=items[(active+1)%count];
- const film=items.slice(0,Math.min(items.length,9));
- return <div className="photographer-gallery" aria-label="Portfólio fotográfico Sabor com Amor">
-  <section className="gallery-editorial-stage" ref={stage}
-    onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}
-    onFocus={()=>setPaused(true)} onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget as Node))setPaused(false);}}
-    onPointerDown={e=>{pointer.current=e.clientX;swiped.current=false;}}
-    onPointerUp={e=>{if(pointer.current!==null&&Math.abs(e.clientX-pointer.current)>48){swiped.current=true;go(e.clientX<pointer.current?1:-1);}pointer.current=null;}}>
-   <div className="gallery-editorial-spread">
-    {count>1&&<button type="button" className="gallery-side gallery-side-left" aria-label="Fotografia anterior" onClick={()=>go(-1)}>
-      <img src={previewLeft.src} alt="" loading="lazy" decoding="async"/>
-    </button>}
-    <button type="button" className="gallery-main-image" aria-label={"Ampliar fotografia: "+main.alt}
-       onClick={()=>{if(swiped.current){swiped.current=false;return;}setLightbox(active);}}>
-      <img src={main.src} alt={main.alt} fetchPriority={active===0?"high":"auto"} decoding="async"/>
+ const current=items[active];
+ const focus=current.focus_x+"% "+current.focus_y+"%";
+ return <section ref={stage} className="gallery-fullscreen" aria-label="Portfólio fotográfico Sabor com Amor"
+  onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}
+  onPointerDown={e=>{pointer.current=e.clientX;swipe.current=false;}}
+  onPointerUp={e=>{
+   if(pointer.current===null)return;
+   const delta=e.clientX-pointer.current;
+   pointer.current=null;
+   if(Math.abs(delta)>45){go(delta<0?1:-1);swipe.current=true;}
+  }}
+  onPointerCancel={()=>{pointer.current=null;}}
+  onKeyDown={e=>{if(e.key==="ArrowLeft")go(-1);if(e.key==="ArrowRight")go(1);}}>
+  <div className="gallery-fullscreen-backdrop" aria-hidden="true" style={{backgroundImage:"url("+JSON.stringify(current.src)+")"}}/>
+  <div className="gallery-fullscreen-stage">
+   <img key={current.id} src={current.src} alt={current.alt} className="gallery-fullscreen-photo"
+    decoding="async" fetchPriority={active===0?"high":"auto"}
+    style={{objectFit:current.fit_mode,objectPosition:focus,transform:"scale("+current.zoom+")"}}/>
+  </div>
+  {count>1&&<div className="gallery-fullscreen-controls" aria-label="Controles de fotografias">
+    <button type="button" onClick={()=>go(-1)} aria-label="Fotografia anterior"><ChevronLeft size={22}/></button>
+    <button type="button" onClick={()=>go(1)} aria-label="Próxima fotografia"><ChevronRight size={22}/></button>
+    <button type="button" onClick={()=>setPaused(x=>!x)} aria-label={paused?"Reproduzir automaticamente":"Pausar passagem automática"}>
+      {paused?<Play size={19}/>:<Pause size={19}/>}
     </button>
-    {count>1&&<button type="button" className="gallery-side gallery-side-right" aria-label="Próxima fotografia" onClick={()=>go(1)}>
-      <img src={previewRight.src} alt="" loading="lazy" decoding="async"/>
-    </button>}
-   </div>
-   {count>1&&<div className="gallery-stage-controls">
-    <button type="button" onClick={()=>go(-1)} aria-label="Voltar fotografia"><ChevronLeft size={24}/></button>
-    <button type="button" onClick={()=>go(1)} aria-label="Avançar fotografia"><ChevronRight size={24}/></button>
+    <button type="button" onClick={()=>setThumbs(x=>!x)} aria-label={thumbs?"Esconder seleção de fotos":"Mostrar seleção de fotos"}
+     aria-expanded={thumbs}><Images size={20}/></button>
    </div>}
-  </section>
-  {film.length>1&&<section aria-label="Fotografias em movimento" className="gallery-film-window">
-   <div className="gallery-film-track">{[...film,...film].map((item,i)=><button type="button" key={item.id+"-"+i} className="gallery-film-photo"
-      aria-label={"Ampliar: "+item.alt} onClick={()=>setLightbox(i%film.length)}>
-      <img src={item.src} alt="" loading="lazy" decoding="async"/>
-    </button>)}</div>
-  </section>}
-  <section className="gallery-photo-editorial" aria-label="Todas as fotografias do portfólio">
-   {items.map((item,i)=><button type="button" key={item.id} className={"gallery-editorial-tile tile-"+(i%7)}
-      onClick={()=>setLightbox(i)} aria-label={"Ampliar: "+item.alt}>
-      <img src={item.src} alt={item.alt} loading="lazy" decoding="async"/>
-    </button>)}
-  </section>
-  <Lightbox hideCount items={items} index={lightbox} onClose={()=>setLightbox(null)} onNavigate={setLightbox}/>
- </div>;
+  {thumbs&&<GalleryTiltedPicker items={items} active={active} onChoose={setActive}/>}
+ </section>;
 }

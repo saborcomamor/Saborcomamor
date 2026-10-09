@@ -30,7 +30,7 @@ test("todas as seções com fotografias foram conectadas ao CMS",()=>{
  "app/nossa-historia/page.tsx"
  ];
  for(const name of sources)assert.match(read(name),/slot=|slotPrefix=/,name);
- assert.match(read("components/admin/AdminGallery.tsx"),/replace_gallery_selection/);
+ assert.match(read("components/admin/AdminGallery.tsx"),/publish_gallery_layout/);
 });
 test("edição funciona por posição e mantém fallback",()=>{
  assert.match(read("components/ui/Photo.tsx"),/resolveSitePhoto/);
