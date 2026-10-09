@@ -10,7 +10,19 @@ type Photo={id:string;alt_text:string;published_storage_path:string|null};
 const pages=[{id:"home",name:"Página inicial",url:"/"},{id:"services",name:"Serviços",url:"/servicos"},
  {id:"buffet",name:"Buffet completo",url:"/buffet-completo"},
  {id:"kitchen",name:"Serviço de cozinha",url:"/servico-de-cozinha"},
- {id:"story",name:"Nossa história",url:"/nossa-historia"},{id:"gallery",name:"Galeria",url:"/galeria"}];
+ {id:"story",name:"Nossa história",url:"/nossa-historia"}];
+const fixedOverlay=(slot:MediaSlot):string=>{
+ const labels:Record<string,string>={
+  "services.hero.01":"Cada celebração tem seu jeito.",
+  "buffet.hero.01":"Você vive a festa. A gente cuida do sabor.",
+  "kitchen.hero.01":"Você prepara a ocasião. A gente prepara a comida.",
+  "story.hero.01":"A cozinha sempre foi um lugar de encontro.",
+  "home.final.01":"Vamos colocar carinho no seu próximo evento?",
+  "home.services.01":"Buffet completo",
+  "home.services.02":"Serviço de cozinha",
+ };
+ return slot.key.startsWith("home.hero.")?"O sabor que reúne. O carinho que fica.":labels[slot.key]||"";
+};
 const imageUrl=(path:string|null)=>{
  const base=process.env.NEXT_PUBLIC_SUPABASE_URL;
  return base&&path?base+"/storage/v1/object/public/sabor-publicadas/"+path.split("/").map(encodeURIComponent).join("/"):"";
@@ -41,7 +53,7 @@ export function AdminSiteMedia(){
  }
  function visibleText(slot:MediaSlot,assignment?:Assignment){
   const presentation=mediaSlotPresentation(slot);
-  return presentation.overlay?(assignment?assignment.caption:presentation.originalText):"";
+  return presentation.overlay?(assignment?assignment.caption:presentation.originalText):fixedOverlay(slot);
  }
  async function refresh(){
   const client=getSupabaseBrowser();if(!client){setMessage("Conexão indisponível.");setLoading(false);return;}
@@ -125,13 +137,13 @@ export function AdminSiteMedia(){
      <div><span>Agora</span><img src={visual(selected,selectedActual??undefined)} alt="Imagem atualmente usada" loading="lazy"/></div>
      <div><span>Escolhida</span><div className="app-compare-new">
        <img src={chosen?imageUrl(chosen.published_storage_path):original?.src} alt="Imagem que será usada"/>
-       {present?.overlay&&caption.trim()&&<b className="app-compare-caption">{caption.trim()}</b>}
+       {(present?.overlay?caption.trim():fixedOverlay(selected))&&<b className="app-compare-caption">{present?.overlay?caption.trim():fixedOverlay(selected)}</b>}
       </div></div>
     </div>
     {present?.overlay&&<label className="app-caption-control">Texto sobre a foto (opcional)
        <input value={caption} onChange={e=>setCaption(e.target.value)} maxLength={160} placeholder="Sem texto"/>
     </label>}
-    {!present?.overlay&&!!present?.explanatoryText&&<p className="app-fixed-text-info">{present.explanatoryText}</p>}
+    {!present?.overlay&&!!fixedOverlay(selected)&&<p className="app-fixed-text-info">Texto da seção é fixo: “{fixedOverlay(selected)}”.</p>}
     <div className="app-sheet-subtitle">Escolher fotografia</div>
     <div className="app-library-picker">
      {library.filter(x=>!!x.published_storage_path).map(item=><button type="button" key={item.id}
