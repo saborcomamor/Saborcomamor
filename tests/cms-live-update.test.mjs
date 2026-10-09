@@ -67,3 +67,21 @@ test("business name changes reach the public header and footer",()=>{
  assert.match(read("components/ui/Header.tsx"),/useBusinessProfile/);
  assert.match(read("components/ui/Footer.tsx"),/business.business_name/);
 });
+
+test("entrada usa RPC v2 com verificação explícita e interface compacta",()=>{
+ const admin=read("components/admin/AdminIntro.tsx");
+ const css=read("styles/admin/AppCMS.css");
+ const sql=read("supabase/migrations/202610090011_repair_intro_sequence_v2.sql");
+ assert.match(admin,/replace_intro_frames_v2/);
+ assert.match(admin,/data\.saved!==true/);
+ assert.match(admin,/data\.photo_ids\.join/);
+ assert.match(admin,/app-intro-secondary/);
+ assert.match(admin,/app-intro-save/);
+ assert.match(admin,/Erro ao salvar a entrada/);
+ assert.doesNotMatch(admin,/Ver sequência<\/button>/);
+ assert.match(css,/grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+ assert.match(css,/\.app-intro-save\.app-primary/);
+ assert.match(sql,/SECURITY DEFINER/);
+ assert.match(sql,/photo_approvals/);
+ assert.match(sql,/REVOKE ALL ON FUNCTION/);
+});
