@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, Download } from "lucide-react";
 import { nav } from "@/lib/site";
 import {useBusinessProfile} from "@/lib/business-client";
 export function Header(){
@@ -20,7 +20,7 @@ export function Header(){
    function onKey(event:KeyboardEvent){
      if(event.key==="Escape"){setOpen(false);menuButton.current?.focus();return}
      if(event.key!=="Tab")return;
-     const anchors=Array.from(menuRoot.current?.querySelectorAll<HTMLElement>("a")||[]);
+     const anchors=Array.from(menuRoot.current?.querySelectorAll<HTMLElement>("a,button")||[]);
      if(!anchors.length)return;
      const first=anchors[0],last=anchors[anchors.length-1];
      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
@@ -37,6 +37,10 @@ export function Header(){
   <nav ref={menuRoot} id="mobile-menu" className={`mobile-nav ${open?"is-open":""}`} aria-label="Menu para celular" aria-hidden={!open}>
    <span className="eyebrow">BEM-VINDO AO SABOR COM AMOR</span>
    {nav.map((item,i)=><Link tabIndex={open?0:-1} style={{transitionDelay:`${i*55}ms`}} key={item.href} href={item.href} onClick={()=>setOpen(false)}>{item.label}<ArrowUpRight size={20}/></Link>)}
+   <button type="button" className="mobile-nav-install" tabIndex={open?0:-1}
+    onClick={()=>{setOpen(false);window.dispatchEvent(new Event("sabor-show-install"));}}>
+    Instalar aplicativo <Download size={20}/>
+   </button>
    <p>Com carinho, de Telêmaco Borba.</p>
   </nav>
  </header>
