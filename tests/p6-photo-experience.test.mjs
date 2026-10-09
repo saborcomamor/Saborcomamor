@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 const read=(path)=>readFileSync(new URL("../"+path,import.meta.url),"utf8");
 
-test("fotos entram sozinhas em pilha e um único gesto revela a segunda overlay",()=>{
+test("fotos entram automaticamente em pilha e um arraste abre diretamente a home",()=>{
  const component=read("components/home/SplashIntro.tsx");
  const css=read("styles/home/PhotoIntro.css");
  assert.match(component,/frames\.map\(\(frame,index\)/);
@@ -11,15 +11,17 @@ test("fotos entram sozinhas em pilha e um único gesto revela a segunda overlay"
  assert.match(component,/setReady\(true\)/);
  assert.match(component,/releaseStack/);
  assert.match(component,/onPointerUp/);
- assert.match(component,/setStage\("original"\)/);
- assert.match(component,/photo-intro-underlay/);
- assert.match(component,/sabor-intro-v4-complete/);
+ assert.match(component,/finish\(\)/);
+ assert.doesNotMatch(component,/photo-intro-underlay|splash-intro-second|splash-shimmer/);
+ assert.match(component,/sabor-intro-v5-complete/);
  assert.match(component,/Arraste para o lado/);
  assert.doesNotMatch(component,/setActive\(i=>i\+1\)|setActive\(active\+1\)|>Continuar</);
  assert.match(css,/photo-intro-arrive/);
  assert.match(css,/photo-intro-sweep/);
  assert.match(css,/--exit-delay/);
  assert.match(css,/prefers-reduced-motion/);
+ assert.match(css,/background:transparent/);
+ assert.doesNotMatch(css,/splash-intro-second/);
 });
 
 test("manifesto permite fontes no CMS e revela textos conforme scroll",()=>{

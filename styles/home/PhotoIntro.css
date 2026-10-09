@@ -1,25 +1,18 @@
 /* Primeira entrada: as fotos surgem uma sobre a outra, sem nenhum gesto entre elas. */
 .photo-intro{
- position:fixed;inset:0;z-index:950;background:#28190f;color:white;
+ position:fixed;inset:0;z-index:950;background:transparent;color:white;
  overflow:hidden;isolation:isolate;touch-action:pan-y;user-select:none;cursor:default;
 }
 .photo-intro.is-ready{cursor:grab}
 .photo-intro.is-ready:active{cursor:grabbing}
-.photo-intro .photo-intro-underlay.splash-intro{
- position:absolute;inset:0;z-index:0;animation:none!important;
- pointer-events:none;visibility:visible;opacity:1;
-}
-.photo-intro .photo-intro-underlay .splash-shimmer,
-.photo-intro .photo-intro-underlay .splash-kicker,
-.photo-intro .photo-intro-underlay .splash-brand,
-.photo-intro .photo-intro-underlay .splash-heart{animation:none!important}
 .photo-intro-stack{
- position:absolute;inset:0;z-index:2;
+ position:absolute;inset:0;z-index:2;background:#28190f;
  transform:translateX(var(--drag-x,0px));
  transition:transform .26s ease-out;
  will-change:transform;
 }
 .photo-intro-stack.is-dragging,.photo-intro-stack.is-leaving{transition:none}
+.photo-intro-stack.is-leaving{background:transparent}
 .photo-intro-stack::before{
  content:"";position:absolute;inset:0;background:#28190f;z-index:0;
  transition:opacity .25s ease;
@@ -63,11 +56,6 @@
 .photo-intro.is-ready .photo-intro-gesture{opacity:1;transform:translateY(0)}
 .photo-intro.is-ready .photo-intro-gesture.is-leaving{opacity:0}
 .photo-intro-gesture svg{animation:photo-intro-cue 2s ease-in-out infinite}
-.splash-intro.splash-intro-second{z-index:960}
-.splash-intro-second button{
- display:inline-flex;align-items:center;gap:9px;
- position:absolute;bottom:7vh;border-bottom:1px solid currentColor;padding-bottom:7px;
-}
 @keyframes photo-intro-arrive{
  from{opacity:0;transform:translateY(4vh) scale(.82);filter:blur(12px);border-radius:24px}
  72%{opacity:1}

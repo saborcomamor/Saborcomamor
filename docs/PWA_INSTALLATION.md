@@ -25,3 +25,10 @@ O desenvolvedor não consegue **forçar** a caixa nativa de instalação no carr
 ## Cuidados de segurança
 
 O service worker não intercepta navegação `/admin` nem `/api` e nunca cacheia respostas de autenticação, JSON de fotos ou conteúdo pessoal. Cache estático tem versão, limpa versões anteriores e não impede revalidação de páginas.
+
+## Início do aplicativo e diferença para a entrada do site
+
+No Android, o sistema operacional/Chrome cria automaticamente uma breve tela de abertura do aplicativo instalado, usando o ícone e o `background_color` do manifesto. Não é uma tela implementada em React e **não pode ser removida** mantendo o PWA com `display: standalone`.
+A apresentação anterior com um grande círculo marrom e coração vinha do ícone PWA de 512 px. Na versão 2 do ícone, o fundo passa a coincidir com o bege do aplicativo e exibe apenas a marca em texto, sem círculo escuro. Apps instalados anteriormente podem manter o ícone armazenado até a atualização do WebAPK ou uma reinstalação.
+
+No site, foi removida completamente a segunda introdução (`splash-intro-second`). A sequência fotográfica aprovada continua e, após um arraste único, o usuário entra diretamente na Home. Não remover o manifesto, não remover o Service Worker e não alterar `display: standalone` para `browser`: isso prejudicaria o pedido de instalação real como aplicativo.

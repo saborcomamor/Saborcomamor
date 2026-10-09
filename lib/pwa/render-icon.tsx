@@ -1,22 +1,24 @@
 import {ImageResponse} from "next/og";
 
-/** Self-contained PNG icon; no remote images, cookies, or storage privileges. */
+/**
+ * Android automatically shows this installed app icon on launch.
+ * Use the same light color as its system background, with only a subtle
+ * wordmark: no extra coffee-colored disc or illustrative heart splash.
+ * PWA stays installable; the OS-managed brief startup screen still exists.
+ */
 export function renderPwaIcon(size:192|512,maskable=false):ImageResponse{
- const heartSide=Math.round(size*(maskable?.37:.48));
- const topBorder=Math.round(size*(maskable?.065:.07));
+ const fontSize=Math.round(size*(maskable?.118:.133));
  return new ImageResponse(
-  <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",
-   background:"#583c30",position:"relative"}}>
-   <div style={{width:size-topBorder*2,height:size-topBorder*2,
-    border:"2px solid rgba(246,239,229,.28)",
-    borderRadius:Math.round(size*.19),display:"flex",alignItems:"center",justifyContent:"center"}}>
-    <svg xmlns="http://www.w3.org/2000/svg" width={heartSide} height={heartSide} viewBox="0 0 64 64">
-     <path d="M9 27C9 13 25 9 32 20C39 9 55 13 55 27C55 41 32 55 32 55S9 41 9 27Z"
-      fill="none" stroke="#F6EFE5" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"/>
-     <path d="M19 10C23 8 28 8 32 11C36 8 41 8 45 10"
-      fill="none" stroke="#E5B696" strokeWidth="2.6" strokeLinecap="round"/>
-     <path d="M21 27C23 22 27 20 32 24" fill="none" stroke="#E5B696" strokeWidth="1.8" strokeLinecap="round"/>
-    </svg>
+  <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",
+   justifyContent:"center",background:"#F6EFE5"}}>
+   <div style={{display:"flex",flexDirection:"column",alignItems:"center",
+    justifyContent:"center",gap:Math.round(size*.013),color:"#583C30"}}>
+    <div style={{fontFamily:"Georgia,serif",fontSize:fontSize+6,lineHeight:1.05,
+     letterSpacing:"-1px"}}>Sabor</div>
+    <div style={{fontFamily:"Georgia,serif",fontSize:fontSize,lineHeight:1.08,
+     fontStyle:"italic",letterSpacing:"-1px"}}>com Amor</div>
+    <div style={{height:Math.max(1,Math.round(size*.004)),width:Math.round(size*.27),
+     background:"#B87655",marginTop:Math.round(size*.025)}}/>
    </div>
   </div>,{width:size,height:size,headers:{"Cache-Control":"public, max-age=86400"}}
  );

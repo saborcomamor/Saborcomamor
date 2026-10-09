@@ -1,17 +1,13 @@
-# Abertura de boas-vindas
+# Entrada fotográfica da Home
 
-**Componente:** `src/components/sections/home/SplashIntro.tsx`
+**Componente:** `components/home/SplashIntro.tsx`
 
-**Animação isolada:** `src/components/sections/home/SplashIntro.motion.ts` (se necessário)
+A única introdução implementada pela página é a sequência de fotografias selecionada no painel. As fotos entram automaticamente, empilhadas na ordem configurada; um único arraste lateral remove a pilha e revela a Home diretamente.
 
-**Visual/conteúdo:** Foto real, logo sobreposto. Duração breve, pular, só uma vez por sessão.
+**Não exibir**: segundo overlay bege, logotipo circular/coração como uma tela adicional, tela "Entrar no site" ou pausa obrigatória depois da sequência.
 
-**Movimento:** Animação reveal + zoom suave; reduced-motion remove overlay.
+**PWA:** a inicialização nativa em dispositivos Android instalados é gerada pelo Chrome/Android, com base no ícone e no manifesto. Não é uma página do site e não pode ser desligada sem perder a experiência de app instalável. O ícone nativo foi suavizado com a própria identidade cromática do site. Mantenha `display: standalone`.
 
-**Regras mobile:** 320–430px; toque e scroll nativos; controls com 44px; sem overflow horizontal; fallback em reduced-motion.
+**Mobile:** interação Pointer Events (toque/arraste), um único gesto e suporte a teclado, `prefers-reduced-motion`, e prévia `?verEntrada=1`. Quando não há fotos selecionadas, a Home abre imediatamente.
 
-**Estados a validar:** carregando, sucesso, mídia vazia, erro de imagem, animação reduzida, navegação por teclado.
-
-**Segurança e privacidade:** somente mídia autorizada, URLs seguras; nunca expor dados de cliente não publicados.
-
-**Teste de aceite:** o conteúdo é entendível e acionável sem animação e funciona no Android de entrada.
+**Segurança:** somente fotos aprovadas e expostas na seleção pública; não incluir endpoints privados no frontend.

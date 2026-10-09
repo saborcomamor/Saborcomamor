@@ -1,9 +1,9 @@
 "use client";
 import {useCallback,useEffect,useRef,useState,type CSSProperties,type PointerEvent} from "react";
-import {ArrowUpRight,ArrowRight} from "lucide-react";
+import {ArrowRight} from "lucide-react";
 import type {IntroFrame} from "@/lib/public-dynamic";
 
-type Stage="photos"|"original"|null;
+type Stage="photos"|null;
 type Gesture={startX:number;startY:number;pointerId:number};
 const PHOTO_STEP_MS=1700;
 const PHOTO_ENTER_MS=1250;
@@ -12,8 +12,8 @@ const EXIT_MS=840;
 
 /**
  * The photographs arrive automatically in the CMS order and remain stacked.
- * The visitor performs ONE gesture to sweep the whole stack away, revealing
- * the pre-existing cream-colored second overlay.
+ * The visitor performs ONE gesture to sweep the stack away and immediately
+ * reveal the real home page. No second/logo splash screen.
  */
 export function SplashIntro({frames}:{frames:IntroFrame[]}){
  const [stage,setStage]=useState<Stage>(null);
@@ -28,16 +28,16 @@ export function SplashIntro({frames}:{frames:IntroFrame[]}){
  const leaveTimer=useRef<number|null>(null);
 
  const finish=useCallback(()=>{
-  try{sessionStorage.setItem("sabor-intro-v4-complete","1");}catch{}
+  try{sessionStorage.setItem("sabor-intro-v5-complete","1");}catch{}
   setStage(null);
  },[]);
 
  useEffect(()=>{
   try{
    const preview=new URLSearchParams(window.location.search).get("verEntrada")==="1";
-   if(!preview&&sessionStorage.getItem("sabor-intro-v4-complete"))return;
+   if(!preview&&sessionStorage.getItem("sabor-intro-v5-complete"))return;
   }catch{}
-  setStage(frames.length?"photos":"original");
+  setStage(frames.length?"photos":null);
  },[frames.length]);
 
  useEffect(()=>{
@@ -67,13 +67,6 @@ export function SplashIntro({frames}:{frames:IntroFrame[]}){
   return()=>{document.body.style.overflow=previous;};
  },[stage]);
 
- useEffect(()=>{
-  if(stage!=="original")return;
-  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const timer=window.setTimeout(finish,reduced?650:2050);
-  return()=>window.clearTimeout(timer);
- },[stage,finish]);
-
  useEffect(()=>()=>{if(leaveTimer.current)window.clearTimeout(leaveTimer.current);},[]);
 
  const releaseStack=useCallback((direction:-1|1)=>{
@@ -86,11 +79,9 @@ export function SplashIntro({frames}:{frames:IntroFrame[]}){
   // single transition. No further gesture is necessary.
   const total=reducedMotion?140:EXIT_MS+(Math.max(0,frames.length-1)*EXIT_STEP_MS)+90;
   leaveTimer.current=window.setTimeout(()=>{
-   setStage("original");
-   setDrag(0);
-   setLeaving(null);
+   finish();
   },total);
- },[stage,ready,reducedMotion,frames.length]);
+ },[stage,ready,reducedMotion,frames.length,finish]);
 
  function down(e:PointerEvent<HTMLDivElement>){
   if(stage!=="photos"||!ready||busy.current||pointer.current||e.button!==0)return;
@@ -121,15 +112,6 @@ export function SplashIntro({frames}:{frames:IntroFrame[]}){
  }
 
  if(stage===null)return null;
- const original=<div className="splash-intro splash-intro-second" role="dialog" aria-modal="true" aria-label="Bem-vindo ao Sabor com Amor">
-  <div className="splash-shimmer"/>
-  <span className="splash-kicker">UMA HISTÓRIA FEITA DE CARINHO</span>
-  <span className="splash-brand">Sabor <em>com</em> Amor</span>
-  <span className="splash-heart">✦</span>
-  <button type="button" onClick={finish}>Entrar no site <ArrowUpRight size={16}/></button>
- </div>;
- if(stage==="original")return original;
-
  return <div ref={focusTarget} className={"photo-intro"+(ready?" is-ready":"")} role="dialog" aria-modal="true" tabIndex={0}
   aria-label={ready?"Arraste a pilha de fotos uma única vez para o lado para abrir o site.":"Aguarde: as fotografias estão entrando uma sobre a outra."}
   onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={cancel}
@@ -138,12 +120,6 @@ export function SplashIntro({frames}:{frames:IntroFrame[]}){
     e.preventDefault();releaseStack(e.key==="ArrowLeft"?-1:1);
    }
   }}>
-  <div className="splash-intro splash-intro-second photo-intro-underlay" aria-hidden="true">
-   <div className="splash-shimmer"/>
-   <span className="splash-kicker">UMA HISTÓRIA FEITA DE CARINHO</span>
-   <span className="splash-brand">Sabor <em>com</em> Amor</span>
-   <span className="splash-heart">✦</span>
-  </div>
   <div className={"photo-intro-stack"+(dragging?" is-dragging":"")+(leaving!==null?" is-leaving":"")}
    style={{"--drag-x":drag+"px","--exit-dir":leaving===-1?"-125vw":"125vw"} as CSSProperties}>
    {frames.map((frame,index)=><div key={frame.id} className="photo-intro-layer"

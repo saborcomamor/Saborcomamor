@@ -12,12 +12,14 @@ test("PWA manifesto define abertura standalone, escopo e ícones PNG instalávei
  }
  assert.match(layout,/manifest:"\/manifest\.webmanifest"/);
  assert.match(layout,/appleWebApp/);
- assert.match(layout,/apple:\[\{url:"\/pwa-icon-192\.png"/);
+ assert.match(layout,/apple:\[\{url:"\/pwa-icon-192\.png\?v=2"/);
 });
 
 test("ícones de 192 e 512 px têm respostas de imagem reais",()=>{
  const renderer=read("lib/pwa/render-icon.tsx");
  assert.match(renderer,/ImageResponse/);
+ assert.match(renderer,/background:"#F6EFE5"/);
+ assert.doesNotMatch(renderer,/path d=/);
  for(const pair of [
   ["app/pwa-icon-192.png/route.tsx","renderPwaIcon(192)"],
   ["app/pwa-icon-512.png/route.tsx","renderPwaIcon(512)"],
@@ -52,7 +54,7 @@ test("aviso instalável respeita um clique real e explica limitações do navega
  assert.match(prompt,/sabor-pwa-offer-dismiss-until/);
  assert.match(prompt,/runningAsApp/);
  assert.match(prompt,/welcomeSequenceActive/);
- assert.match(prompt,/splash-intro-second/);
+ assert.doesNotMatch(prompt,/splash-intro-second/);
  assert.match(prompt,/Instalar aplicativo/);
  assert.match(prompt,/Adicionar à Tela de Início/);
  assert.match(prompt,/Abra o link no Chrome/);
