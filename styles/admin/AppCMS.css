@@ -106,3 +106,9 @@
 @media(min-width:620px){.app-library-grid,.app-gallery-grid,.app-library-picker{grid-template-columns:repeat(5,minmax(0,1fr))}.app-site-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(min-width:800px){.app-sheet-backdrop{align-items:center}.app-sheet{border-radius:20px;max-height:90dvh}.app-site-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:430px){.app-location-selectors{grid-template-columns:1fr}.app-gallery-actions button,.app-gallery-actions a{font-size:.73rem;padding:9px 10px}.app-savebar span{max-width:110px}.app-upload-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Ações de publicação visíveis; ordenação recolhida até ser solicitada */
+.app-savebar{position:sticky;top:70px;z-index:60;box-shadow:0 5px 18px #47302114}
+.app-gallery-order{border:1px solid #e2d3c3;border-radius:11px;background:#fffaf4;padding:11px 12px}
+.app-gallery-order summary{cursor:pointer;font-size:.84rem;font-weight:750;color:#50382b;list-style-position:inside}
+.app-gallery-order[open] summary{margin-bottom:13px}
