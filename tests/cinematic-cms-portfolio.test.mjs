@@ -3,12 +3,13 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 const read=(name)=>readFileSync(new URL("../"+name,import.meta.url),"utf8");
 
-test("primeira entrada vem antes da overlay clássica e aceita gesto real na foto",()=>{
+test("entrada fotográfica abre a Home sem segunda tela clássica",()=>{
  const splash=read("components/home/SplashIntro.tsx");
- assert.match(splash,/Stage="photos"\|"original"\|null/);
+ assert.match(splash,/Stage="photos"\|null/);
  assert.match(splash,/onPointerDown/);
  assert.match(splash,/onPointerUp/);
- assert.match(splash,/setStage\("original"\)/);
+ assert.match(splash,/finish\(\)/);
+ assert.doesNotMatch(splash,/splash-intro-second|photo-intro-underlay|setStage\("original"\)/);
  assert.match(splash,/sessionStorage\.setItem/);
  assert.match(read("app/page.tsx"),/getIntroFrames/);
  assert.match(read("components/admin/AdminIntro.tsx"),/replace_intro_frames/);
