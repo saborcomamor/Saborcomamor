@@ -41,7 +41,7 @@ test("save success is verified and notifies public clients",()=>{
 test("gallery displays only explicitly selected public photos",()=>{
  assert.match(read("components/gallery/GalleryCollection.tsx"),/readLatestGallery/);
  assert.match(read("lib/cms/browser-public.ts"),/from\("gallery_entries"\)/);
- assert.match(read("app/galeria/page.tsx"),/<GalleryCollection items=\{photos\}/>);
+ assert.ok(read("app/galeria/page.tsx").includes("<GalleryCollection items={photos}/>"));
 });
 
 test("intro can be previewed even if previously viewed this session",()=>{
