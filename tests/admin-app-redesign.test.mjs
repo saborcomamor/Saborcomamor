@@ -25,7 +25,7 @@ test("galeria usa seleção explícita e salva ordem em operação única",()=>{
  const publicPage=read("app/galeria/page.tsx");
  const db=read("lib/supabase/public.ts");
  const sql=read("supabase/migrations/202610090007_gallery_entries.sql");
- assert.match(gallery,/replace_gallery_selection/);
+ assert.match(gallery,/publish_gallery_layout/);
  assert.match(gallery,/Publicar seleção/);
  assert.match(gallery,/setSelected\(\[\]\)/);
  assert.match(db,/gallery_entries/);

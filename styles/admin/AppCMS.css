@@ -135,3 +135,48 @@
 .app-intro-preview>button{position:absolute;top:18px;right:18px;border:1px solid #fff9;border-radius:50%;background:#31231cdd;color:#fff;width:44px;height:44px;display:grid;place-items:center}
 @keyframes intro-preview-image{from{opacity:.4;transform:scale(1.08)}to{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.app-intro-preview>img{animation:none}}
+
+/* P6: miniature selection, high-quality recovery, intelligent framing and branding */
+.app-site-tabs{overflow-x:auto;justify-content:flex-start;scrollbar-width:thin}
+.app-site-tabs>button{flex:0 0 auto;white-space:nowrap;padding-inline:13px}
+.app-visual-settings{padding:8px 0 15px}
+.app-visual-settings .app-page-top h2{font-size:1.7rem}
+.app-font-note{font-size:.81rem;color:#756252;margin-bottom:15px}
+.app-font-options{display:grid;gap:10px;margin-bottom:17px}
+.app-font-choice{display:flex;align-items:flex-start;flex-direction:column;gap:4px;text-align:left;border:1px solid #dbc7b6;border-radius:13px;background:#fffaf4;padding:16px;cursor:pointer;color:#543b30}
+.app-font-choice.chosen{background:#f0e2d6;border:2px solid #b87655}
+.app-font-sample{font-size:2.7rem;line-height:1.1}
+.app-font-sample.sample-caveat{font-family:"Caveat",cursive}
+.app-font-sample.sample-dancing{font-family:"Dancing Script",cursive;font-size:2.2rem}
+.app-font-sample.sample-allura{font-family:"Allura",cursive;font-size:3.2rem}
+.app-font-choice small{font-size:.75rem;color:#735c4e}
+.app-favicon{border-top:1px solid #e3d2c1;margin-top:22px;padding:18px 0}
+.app-favicon h3{font:600 1.6rem var(--serif);margin:0 0 13px}
+.app-favicon-preview{display:flex;align-items:center;gap:16px;margin-bottom:13px}
+.app-favicon-preview img,.app-favicon-fallback{height:64px;width:64px;object-fit:contain;background:#f1e7dc;border-radius:12px;padding:8px}
+.app-favicon-fallback{display:grid;place-items:center;font:600 2rem var(--serif)}
+.app-favicon-preview>span:last-child{font-size:.77rem;color:#725f50;max-width:220px}
+.app-favicon-actions{display:flex;align-items:center;gap:10px}
+.app-favicon-actions label{position:relative;overflow:hidden;cursor:pointer}
+.app-favicon-actions input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.app-favicon-actions button{border:1px solid #d8c1ae;border-radius:9px;background:white;padding:11px;color:#654a3a}
+.app-gallery-choose{display:flex;min-width:0;flex-direction:column;gap:3px}
+.app-gallery-choose>.app-tile{width:100%;flex-shrink:0}
+.app-frame-button{display:flex;align-items:center;justify-content:center;gap:4px;padding:6px 2px;border:1px solid #dbc8b5;background:#fff7f0;color:#573c2f;border-radius:7px;font-size:.7rem}
+.app-gallery-order-item .app-drag-handle{touch-action:none;display:grid;place-items:center;color:#886d5a;cursor:grab}
+.app-gallery-order-item .app-drag-handle:active{cursor:grabbing}
+.app-crop-preview{position:relative;width:100%;height:min(48svh,430px);background:#35271f;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:10px}
+.app-crop-preview img{height:100%;width:100%;display:block}
+.app-crop-controls{display:grid;gap:14px;padding:15px 0}
+.app-crop-controls label{font-size:.82rem;font-weight:700;display:flex;flex-direction:column;gap:7px}
+.app-crop-controls input[type=range]{accent-color:#b87655;width:100%}
+.app-crop-controls select{border:1px solid #d8c7b4;background:#fff;padding:12px;border-radius:10px}
+.app-crop-done{width:100%}
+.app-crop-note{font-size:.73rem;text-align:center;color:#7b6759;margin-top:11px}
+.app-highres-action,.app-cleanup-button{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;border:1px solid #cebbaa;background:#fffbf6;color:#5c4134;padding:13px;border-radius:12px;font-weight:750;font-size:.82rem;margin:20px 0;cursor:pointer}
+.app-highres-action:disabled,.app-cleanup-button:disabled{opacity:.5}
+.app-photo-delete{margin-top:20px;display:flex;align-items:center;gap:10px}
+.app-delete-action{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid #bc7564;color:#8d4437;background:#fff6f3;padding:12px;border-radius:10px;flex:1}
+.app-photo-delete>button:not(.app-delete-action){border:1px solid #d5c3b2;background:white;padding:12px;border-radius:10px}
+.app-protected-photo{font-size:.78rem;color:#725d50;line-height:1.55;margin-top:15px}
+@media(max-width:420px){.app-font-sample{font-size:2.25rem}.app-font-sample.sample-dancing{font-size:1.95rem}.app-font-sample.sample-allura{font-size:2.75rem}}

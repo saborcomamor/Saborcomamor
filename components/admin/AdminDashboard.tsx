@@ -8,6 +8,8 @@ import {AdminGallery} from "./AdminGallery";
 import {AdminServices} from "./AdminServices";
 import {AdminIntro} from "./AdminIntro";
 import {AdminBusinessProfile} from "./AdminBusinessProfile";
+import {AdminVisualSettings} from "./AdminVisualSettings";
+import {AdminFavicon} from "./AdminFavicon";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
 type Tab="site"|"photos"|"gallery"|"more";
 const tabs=[{id:"site" as const,label:"Site",Icon:LayoutTemplate},
@@ -17,7 +19,7 @@ const tabs=[{id:"site" as const,label:"Site",Icon:LayoutTemplate},
 export function AdminDashboard(){
  const [status,setStatus]=useState<"loading"|"guest"|"admin"|"config">("loading");
  const [tab,setTab]=useState<Tab>("site");
- const [siteArea,setSiteArea]=useState<"photos"|"intro">("photos");
+ const [siteArea,setSiteArea]=useState<"photos"|"intro"|"fonts">("photos");
  const check=useCallback(async()=>{
   const client=getSupabaseBrowser();if(!client){setStatus("config");return;}
   const {data:{user},error}=await client.auth.getUser();
@@ -42,14 +44,16 @@ export function AdminDashboard(){
        <div className="app-site-tabs" role="group" aria-label="Área do site">
         <button type="button" className={siteArea==="photos"?"active":""} onClick={()=>setSiteArea("photos")}>Fotos das páginas</button>
         <button type="button" className={siteArea==="intro"?"active":""} onClick={()=>setSiteArea("intro")}>Entrada do site</button>
+        <button type="button" className={siteArea==="fonts"?"active":""} onClick={()=>setSiteArea("fonts")}>Fontes</button>
        </div>
-       {siteArea==="intro"?<AdminIntro/>:<AdminSiteMedia/>}
+       {siteArea==="intro"?<AdminIntro/>:siteArea==="fonts"?<AdminVisualSettings/>:<AdminSiteMedia/>}
       </>}
       {tab==="photos"&&<AdminPhotos onEditSite={()=>setTab("site")}/>}
       {tab==="gallery"&&<AdminGallery/>}
       {tab==="more"&&<section className="app-page">
         <div className="app-page-top"><h2>Mais</h2></div>
         <AdminBusinessProfile/>
+        <AdminFavicon/>
         <details className="app-admin-more"><summary>Serviços</summary><AdminServices/></details>
         <button type="button" className="app-logout" onClick={()=>void logout()}><LogOut size={18}/> Sair do painel</button>
       </section>}

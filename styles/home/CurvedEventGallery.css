@@ -1,2 +1,15 @@
 /* Eventos em arco */
 .curved-events{background:#e9d7c8}.curved-events h2{margin:16px 0}.curved-events h2 em{color:#a4654a}.curved-events .container>p{max-width:490px;color:var(--muted)}.curved-window{margin:40px auto 0;overflow:hidden;perspective:1100px}.curved-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:35px max(18px,calc((100vw - 1100px)/2)) 55px;overscroll-behavior-inline:contain}.curved-track::-webkit-scrollbar{display:none}.curved-event{flex:0 0 220px;height:320px;position:relative;overflow:hidden;border-radius:130px 130px 12px 12px;scroll-snap-align:center;transform:rotateY(var(--turn));box-shadow:0 22px 30px #3d271c25}.curved-event .photo-image{transition:transform .7s}.curved-event span{position:absolute;bottom:0;left:0;width:100%;padding:40px 15px 18px;color:#fff;background:linear-gradient(0deg,#24170fa9,transparent);font:1.4rem var(--serif)}.curved-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px}
+
+/* Adapted File Drawer: selected photograph rises and opens like a folio. */
+.curved-track{align-items:end;perspective:1100px}
+.curved-event.drawer-photo{border:0;padding:0;cursor:pointer;flex-basis:clamp(116px,25vw,188px);
+ height:clamp(290px,42vw,365px);border-radius:125px 125px 12px 12px;
+ transform:perspective(980px) rotateY(var(--turn)) translateY(15px) scale(.92);
+ transition:transform .7s cubic-bezier(.18,.75,.25,1),flex-basis .7s cubic-bezier(.18,.75,.25,1),box-shadow .7s}
+.curved-event.drawer-photo.active{flex-basis:clamp(198px,30vw,270px);
+ transform:rotateY(0deg) translateY(-17px) scale(1);
+ box-shadow:0 25px 45px #3d271c3d}
+.curved-event.drawer-photo:focus-visible{outline:3px solid #b87655;outline-offset:4px}
+@media(max-width:600px){.curved-event.drawer-photo{flex-basis:135px;height:290px}.curved-event.drawer-photo.active{flex-basis:215px;height:325px}}
+@media(prefers-reduced-motion:reduce){.curved-event.drawer-photo{transition:none!important}}

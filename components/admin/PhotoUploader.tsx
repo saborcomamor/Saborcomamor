@@ -2,21 +2,10 @@
 import {useEffect,useRef,useState,type FormEvent} from "react";
 import {X,Images,CheckCircle2} from "lucide-react";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
+import {makeQualityWebp} from "@/lib/cms/highres";
 type Item={key:string;file:File;preview:string;status:"ready"|"sending"|"done"|"failed";error?:string};
 const limit=30;
 const allowed=["image/jpeg","image/png","image/webp","image/avif"];
-async function toWebp(file:File){
- const bitmap=await createImageBitmap(file);
- try {
-  const ratio=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));
-  const canvas=document.createElement("canvas");
-  canvas.width=Math.round(bitmap.width*ratio);canvas.height=Math.round(bitmap.height*ratio);
-  canvas.getContext("2d")?.drawImage(bitmap,0,0,canvas.width,canvas.height);
-  const data=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,"image/webp",.82));
-  if(!data||data.type!=="image/webp"||data.size>3*1024*1024)throw Error("Não foi possível otimizar esta foto.");
-  return data;
- }finally{bitmap.close();}
-}
 async function digest(blob:Blob){
  return [...new Uint8Array(await crypto.subtle.digest("SHA-256",await blob.arrayBuffer()))].map(x=>x.toString(16).padStart(2,"0")).join("");
 }
@@ -54,7 +43,7 @@ export function PhotoUploader({onClose,onComplete,onEditSite}:{onClose:()=>void;
   for(const item of pending){
    change(item.key,"sending");
    try{
-    const optimized=await toWebp(item.file);
+    const {blob:optimized,width,height}=await makeQualityWebp(item.file,3000);
     const hash=await digest(optimized);
     const id=crypto.randomUUID();
     const extension=item.file.name.split(".").pop()?.toLowerCase()||"jpg";
@@ -63,7 +52,7 @@ export function PhotoUploader({onClose,onComplete,onEditSite}:{onClose:()=>void;
     const alt="Fotografia do Buffet Sabor com Amor: "+item.file.name.replace(/\.[^/.]+$/,"").replace(/[_-]+/g," ").slice(0,150);
     const created=await client.from("photos").insert({
      id,album_id:null,asset_sha256:hash,alt_text:alt,caption:"",
-     published_storage_path:publicPath,is_published:false
+     published_storage_path:publicPath,is_published:false,width,height
     });
     if(created.error)throw Error("Falha ao cadastrar.");
     const original=await client.storage.from("sabor-originais").upload(originalPath,item.file,{contentType:item.file.type,upsert:false});

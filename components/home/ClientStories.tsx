@@ -1,14 +1,22 @@
-import {Reveal} from "@/components/ui/Reveal";
+"use client";
+import {ScrollInk} from "@/components/ui/ScrollInk";
+import {useVisualSettings} from "@/lib/visual-client";
 export function ClientStories(){
- return <section className="section keepsakes-section" aria-label="O que realmente importa">
+ const visual=useVisualSettings();
+ return <section className={"section keepsakes-section keepsakes-font-"+visual.keepsakes_font} aria-label="O que realmente importa">
   <div className="container keepsakes-inner">
-   <Reveal><span className="eyebrow">O QUE REALMENTE IMPORTA</span></Reveal>
+   <span className="eyebrow">O QUE REALMENTE IMPORTA</span>
    <div className="keepsakes-poem">
-    <Reveal from="bottom"><p className="keepsakes-line">Que a mesa seja farta.</p></Reveal>
-    <Reveal from="bottom" delay={.25}><p className="keepsakes-line">Que os encontros sejam leves.</p></Reveal>
-    <Reveal from="bottom" delay={.5}><p className="keepsakes-line is-final">Que as memórias sejam bonitas.</p></Reveal>
+    <ScrollInk><p className="keepsakes-line">Que a mesa seja farta.</p></ScrollInk>
+    <ScrollInk><p className="keepsakes-line">Que os encontros sejam leves.</p></ScrollInk>
+    <ScrollInk><p className="keepsakes-line is-final">Que as memórias sejam bonitas.</p></ScrollInk>
    </div>
-   <Reveal from="bottom" delay={.65}><p className="keepsakes-subtitle">Porque o melhor de uma festa é estar perto de quem a gente ama.</p></Reveal>
+   <ScrollInk className="keepsakes-copy">
+    <p className="keepsakes-subtitle" aria-label="Porque o melhor de uma festa é estar perto de quem a gente ama.">
+     <span>Porque o melhor de uma festa</span>
+     <span>é estar perto de quem a gente ama.</span>
+    </p>
+   </ScrollInk>
   </div>
  </section>;
 }
