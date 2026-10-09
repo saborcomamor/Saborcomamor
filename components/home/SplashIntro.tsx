@@ -25,7 +25,7 @@ export function SplashIntro({frames}:{frames:IntroFrame[]}){
  const pointer=useRef<Gesture|null>(null);
  const focusTarget=useRef<HTMLDivElement>(null);
  const busy=useRef(false);
- const leaveTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+ const leaveTimer=useRef<number|null>(null);
 
  const finish=useCallback(()=>{
   try{sessionStorage.setItem("sabor-intro-v4-complete","1");}catch{}
