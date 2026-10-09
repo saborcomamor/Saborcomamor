@@ -66,6 +66,13 @@ export function AdminGallery(){
    <button type="button" onClick={()=>{setSelected([]);setConfirmEmpty(false);}}>Limpar</button>
    <a href="/galeria" target="_blank" rel="noopener noreferrer">Ver galeria ↗</a>
   </div>
+  {dirty&&<div className="app-savebar" role="region" aria-label="Publicar alterações">
+    <span>{selected.length} foto(s) escolhida(s)</span>
+    <button type="button" disabled={busy} onClick={()=>void publish()}>
+     {busy?<LoaderCircle size={16} className="app-spin"/>:null}
+     {confirmEmpty?"Confirmar galeria vazia":"Publicar seleção"}
+    </button>
+  </div>}
   <div className="app-gallery-grid" aria-label="Fotografias disponíveis">
    {photos.filter(x=>!!x.published_storage_path).map(p=>{
     const position=selected.indexOf(p.id);
@@ -76,8 +83,8 @@ export function AdminGallery(){
     </button>;
    })}
   </div>
-  {selected.length>1&&<div className="app-gallery-order">
-    <h3>Ordem na galeria</h3>
+  {selected.length>1&&<details className="app-gallery-order">
+    <summary>Ordenar fotos ({selected.length})</summary>
     <div className="app-gallery-order-list">{selected.map((id,i)=>{
      const p=byId.get(id);if(!p)return null;
      return <div className="app-gallery-order-item" key={id}>
@@ -87,14 +94,7 @@ export function AdminGallery(){
       <button aria-label={"Mover foto "+(i+1)+" para a direita"} disabled={i===selected.length-1||busy} onClick={()=>move(i,1)} type="button"><ArrowDown size={17}/></button>
      </div>;
     })}</div>
-   </div>}
-  <div className="app-savebar">
-    <span>{dirty?"Alterações não publicadas":"Galeria salva"}</span>
-    <button type="button" disabled={!dirty||busy} onClick={()=>void publish()}>
-     {busy?<LoaderCircle size={16} className="app-spin"/>:null}
-     {confirmEmpty?"Confirmar galeria vazia":"Publicar seleção"}
-    </button>
-  </div>
+   </details>}
   {feedback&&<p className="app-feedback" role="status">{feedback}</p>}
  </section>;
 }
