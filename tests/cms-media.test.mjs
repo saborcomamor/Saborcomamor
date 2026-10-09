@@ -27,9 +27,10 @@ test("todas as seções com fotografias foram conectadas ao CMS",()=>{
  "components/services/FullBuffetGallery.tsx","components/services/CookingGallery.tsx",
  "components/story/StoryProfile.tsx","app/servicos/page.tsx",
  "app/buffet-completo/page.tsx","app/servico-de-cozinha/page.tsx",
- "app/nossa-historia/page.tsx","app/galeria/page.tsx"
+ "app/nossa-historia/page.tsx"
  ];
  for(const name of sources)assert.match(read(name),/slot=|slotPrefix=/,name);
+ assert.match(read("components/admin/AdminGallery.tsx"),/replace_gallery_selection/);
 });
 test("edição funciona por posição e mantém fallback",()=>{
  assert.match(read("components/ui/Photo.tsx"),/resolveSitePhoto/);
