@@ -12,6 +12,9 @@ export const nav = [
   { href: "/nossa-historia", label: "Nossa história" },
   { href: "/orcamento", label: "Orçamento" },
 ];
-export function waUrl(message: string) {
-  return site.whatsapp ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}` : null;
+export function waUrl(message: string, number: string = site.whatsapp) {
+  const digits=number.replace(/\D/g,"");
+  return digits.length>=10&&digits.length<=15
+    ? `https://wa.me/${digits}?text=${encodeURIComponent(message)}`
+    : null;
 }

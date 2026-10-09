@@ -10,7 +10,16 @@ import { LivingPhotoMosaic } from "@/components/home/LivingPhotoMosaic";
 import { ClientStories } from "@/components/home/ClientStories";
 import { BookingSteps } from "@/components/home/BookingSteps";
 import { FinalInvitation } from "@/components/home/FinalInvitation";
-export default function HomePage() { return <>
- <SplashIntro/><CinematicHero/><WarmWelcome/><ExpandableServices/><RotatingFoodGallery/>
- <StoryCardStack/><CurvedEventGallery/><ServingStyles/><LivingPhotoMosaic/><ClientStories/><BookingSteps/><FinalInvitation/>
+import {HomeWave} from "@/components/home/HomeWave";
+import {getIntroFrames} from "@/lib/public-dynamic";
+export const dynamic="force-dynamic";
+export default async function HomePage() { const frames=await getIntroFrames(); return <>
+ <SplashIntro frames={frames}/>
+ <div className="home-editorial">
+  <CinematicHero/><HomeWave/><WarmWelcome/><HomeWave variant="warm"/>
+  <ExpandableServices/><HomeWave/><RotatingFoodGallery/><HomeWave variant="warm"/>
+  <StoryCardStack/><HomeWave/><CurvedEventGallery/><HomeWave variant="warm"/>
+  <ServingStyles/><HomeWave/><LivingPhotoMosaic/><HomeWave variant="warm"/>
+  <ClientStories/><HomeWave/><BookingSteps/><HomeWave variant="warm"/><FinalInvitation/>
+ </div>
 </>; }

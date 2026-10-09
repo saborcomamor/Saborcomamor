@@ -1,0 +1,7 @@
+/* Linhas leves entre as seções e profundidade luminosa; sem imagens de bancos */
+.home-editorial{isolation:isolate}
+.home-editorial .section:not(.cinematic-hero):not(.keepsakes-section){background-image:radial-gradient(ellipse 48% 35% at 5% 8%,#ffffff49,transparent 95%),radial-gradient(ellipse 42% 33% at 92% 80%,#f0d7c52b,transparent 97%)}
+.home-wave{position:relative;z-index:4;height:0;pointer-events:none;color:#c79b7f;opacity:.7}
+.home-wave-warm{color:#a58d72;opacity:.47}
+.home-wave svg{position:absolute;left:0;top:-15px;width:100%;height:40px;display:block;filter:drop-shadow(0 2px 5px #edd8ca53)}
+@media(max-width:650px){.home-wave svg{height:26px;top:-10px}.home-wave{opacity:.43}}

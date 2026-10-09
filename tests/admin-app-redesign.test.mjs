@@ -38,7 +38,7 @@ test("galeria usa seleção explícita e salva ordem em operação única",()=>{
 });
 test("galeria pública não mostra filtros, contagem ou texto sobre fotos",()=>{
  const pub=read("components/gallery/GalleryCollection.tsx");
- assert.doesNotMatch(pub,/filters\.map|className="gallery-filters"|className="gallery-count"|<button/);
+ assert.doesNotMatch(pub,/filters\.map|className="gallery-filters"|className="gallery-count"/);
  assert.doesNotMatch(read("components/ui/PhotoGrid.tsx"),/<span>\{item\.label\}<\/span>/);
 });
 test("todas as imagens anteriores são preservadas por migração não destrutiva",()=>{

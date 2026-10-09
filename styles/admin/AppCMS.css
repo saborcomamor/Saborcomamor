@@ -112,3 +112,26 @@
 .app-gallery-order{border:1px solid #e2d3c3;border-radius:11px;background:#fffaf4;padding:11px 12px}
 .app-gallery-order summary{cursor:pointer;font-size:.84rem;font-weight:750;color:#50382b;list-style-position:inside}
 .app-gallery-order[open] summary{margin-bottom:13px}
+
+/* CMS da entrada e informações: controles compactos no celular */
+.app-site-tabs{display:flex;gap:7px;margin:3px 0 20px}
+.app-site-tabs button{flex:1;border:1px solid #dbcbbb;border-radius:12px;background:#fffaf4;color:#583c30;font-weight:700;font-size:.79rem;padding:11px;cursor:pointer}
+.app-site-tabs button.active{background:#583c30;border-color:#583c30;color:#fff}
+.app-business{border-top:1px solid #e3d2c1;padding:16px 0;margin-top:12px}
+.app-business h3{font:600 1.65rem var(--serif);margin:0 0 15px}
+.app-business-form{display:grid;gap:11px}
+.app-business-form label{display:flex;flex-direction:column;gap:5px;font-size:.79rem;font-weight:700}
+.app-business-form input{width:100%;min-width:0;border:1px solid #d4c3b2;background:#fff;color:#3e2d25;border-radius:9px;padding:12px}
+.app-business-form button{width:100%;margin-top:7px}
+.app-admin-more{border-top:1px solid #dfcdbc;margin-top:22px;padding-top:18px}
+.app-admin-more>summary{font-size:.91rem;cursor:pointer;font-weight:700}
+.app-intro-hint{font-size:.83rem;color:#75655b;margin:7px 0 15px}
+.app-intro-actions{display:flex;gap:9px;margin:16px 0}
+.app-intro-actions button{flex:1;border:1px solid #ccb9a6;border-radius:10px;background:#fff;color:#50372c;cursor:pointer;padding:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.85rem}
+.app-intro-actions button:disabled{opacity:.45}
+.app-intro-preview{position:fixed;inset:0;z-index:700;background:#1a100d;display:flex;align-items:center;justify-content:center}
+.app-intro-preview>img{height:100%;width:100%;object-fit:cover;animation:intro-preview-image .7s ease both}
+.app-intro-preview-text{position:absolute;bottom:clamp(65px,9vh,125px);left:0;right:0;text-align:center;color:white;font-size:.85rem;letter-spacing:.07em;text-shadow:0 2px 5px #0009}
+.app-intro-preview>button{position:absolute;top:18px;right:18px;border:1px solid #fff9;border-radius:50%;background:#31231cdd;color:#fff;width:44px;height:44px;display:grid;place-items:center}
+@keyframes intro-preview-image{from{opacity:.4;transform:scale(1.08)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.app-intro-preview>img{animation:none}}

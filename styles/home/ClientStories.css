@@ -1,2 +1,12 @@
-/* Manifesto */
-.keepsakes-section{text-align:center;color:var(--cream);background:var(--olive);padding-block:140px}.keepsakes-flower{display:block;font-size:3rem;margin-bottom:10px;animation:slow-spin 20s linear infinite}.keepsakes-section h2{font-size:clamp(2.7rem,9vw,5.5rem);margin:26px auto 22px;max-width:850px}.keepsakes-section em{color:#f2d5b9}.keepsakes-section p{max-width:400px;margin:auto;color:#f3ebdf}@keyframes slow-spin{to{transform:rotate(360deg)}}
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&display=swap');
+/* Manifesto em escrita fluida, introdução cinematográfica */
+.keepsakes-section{position:relative;isolation:isolate;text-align:center;color:#4d342b;background:#f3e9db;padding:clamp(100px,16vw,170px) 0;min-height:660px;display:flex;align-items:center;overflow:hidden}
+.keepsakes-section:before{content:"";position:absolute;inset:-15%;pointer-events:none;background:radial-gradient(ellipse at 15% 35%,#fff9ef,transparent 34%),radial-gradient(ellipse at 82% 60%,#d6b6a459,transparent 33%);opacity:.95;z-index:-1}
+.keepsakes-inner{width:100%}
+.keepsakes-section .eyebrow{color:#9a7056;letter-spacing:.23em}
+.keepsakes-poem{margin:45px auto 34px;display:grid;gap:12px;max-width:1000px}
+.keepsakes-line{font:normal clamp(2.8rem,8.1vw,6.4rem)/1.05 "Caveat","Segoe Print","Brush Script MT",cursive;letter-spacing:.005em;color:#533b2e;text-wrap:balance}
+.keepsakes-line.is-final{color:#ae7556;font-size:clamp(3.15rem,9vw,7rem)}
+.keepsakes-section .keepsakes-subtitle{font:400 clamp(.89rem,2vw,1rem)/1.65 var(--sans);max-width:460px;margin:auto;color:#796458}
+@media(max-width:650px){.keepsakes-section{padding-block:110px;min-height:580px}.keepsakes-poem{margin:32px auto;gap:17px}.keepsakes-line{font-size:clamp(2.9rem,13vw,5rem)}.keepsakes-line.is-final{font-size:clamp(3.05rem,13.3vw,5rem)}}
+@media(prefers-reduced-motion:reduce){.keepsakes-section *{animation:none!important}}
