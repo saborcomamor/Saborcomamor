@@ -69,3 +69,25 @@
 .cms-gallery-photo small{font-size:.72rem;color:#786357}
 @media(max-width:750px){.cms-gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:490px){.cms-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cms-bulk-bar span{flex-basis:100%}}
+
+
+/* Prévia honesta da foto e do texto que realmente aparecerão */
+.cms-preview-frame{position:relative;isolation:isolate;overflow:hidden;border-radius:9px}
+.cms-preview-frame img{display:block;border-radius:9px}
+.cms-image-text{position:absolute;left:0;right:0;bottom:0;color:#fff;font-family:var(--serif);font-size:clamp(1rem,2.5vw,1.5rem);line-height:1.1;padding:26px 8px 10px;background:linear-gradient(0deg,#281a15c9,transparent);text-shadow:0 1px 3px #0007;overflow-wrap:anywhere}
+.cms-current-copy{font-size:.79rem;line-height:1.55;margin:12px 0 0;color:#675245;background:#f6eee4;padding:10px;border-radius:8px}
+.cms-current-copy strong{color:#4f372c}
+.cms-editor-guidance{border:1px solid #dac5b4;background:#f5e9dc;border-radius:11px;padding:13px;margin:12px 0}
+.cms-editor-guidance strong{color:#583c30}
+.cms-editor-guidance p{font-size:.85rem;line-height:1.5;margin:6px 0 12px;color:#6d5648}
+.cms-editor-guidance p:last-child{margin-bottom:0}
+.cms-editor-guidance label{display:flex;flex-direction:column;gap:7px;font-size:.85rem;font-weight:700;margin:14px 0}
+.cms-selected-preview{position:relative;flex:0 0 100px;height:100px;overflow:hidden;border-radius:8px}
+.cms-selected-preview img{width:100%;height:100%;object-fit:cover}
+.cms-selected-preview b{position:absolute;bottom:0;left:0;right:0;padding:16px 6px 5px;color:white;background:linear-gradient(0deg,#20120bd9,transparent);font:1rem/1.05 var(--serif);overflow-wrap:anywhere}
+.cms-pages small{font-size:.69rem;opacity:.8}
+@media(max-width:500px){
+ .cms-selected-preview{flex-basis:78px;height:78px}
+ .cms-image-text{font-size:1.05rem}
+ .cms-current-copy{font-size:.78rem}
+}
