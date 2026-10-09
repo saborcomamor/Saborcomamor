@@ -175,7 +175,7 @@ export function AdminPhotos() {
   return <section className="admin-panel admin-photos" aria-labelledby="photos-title">
     <p className="eyebrow">SEU ACERVO</p>
     <h2 id="photos-title">Adicionar fotografias</h2>
-    <p>Envie as fotos de um evento inteiro de uma vez, sem preencher os mesmos dados repetidamente.</p>
+    <p>Este é seu banco de imagens. Envie fotos aqui e depois escolha em Editar o site onde cada uma aparece. A galeria pública é opcional.</p>
     <div className="admin-help" aria-label="Como organizar">
       <strong>Como funciona?</strong>
       <p><b>Álbum</b> é uma pasta, como “Casamento da Ana”. <b>Categoria</b> é escolhida quando você cria o álbum (Pratos, Eventos, Buffets ou Bastidores). Aqui, basta escolher a pasta e selecionar as fotos.</p>
@@ -189,7 +189,7 @@ export function AdminPhotos() {
           {albums.map(album => <option key={album.id} value={album.id}>{album.title}{album.is_published ? "" : " · rascunho"}</option>)}
         </select>
       </label>
-      <p className="admin-field-hint">Não encontrou o evento? Abra a aba <b>Álbuns</b>, crie a pasta e volte para Fotografias. Sem álbum, as fotos aparecem na categoria Buffets quando publicadas.</p>
+      <p className="admin-field-hint">Não encontrou o evento? Abra a aba <b>Álbuns</b>, crie a pasta e volte para Fotografias. Sem álbum, fotos publicadas na galeria entram em Buffets. No editor do site, você escolhe posições independentes.</p>
       {selectedAlbum && !selectedAlbum.is_published && <p className="admin-hint-warning">Esse álbum está em rascunho. Para mostrar as fotos no site, publique também o álbum na aba Álbuns.</p>}
       <div className="admin-step-heading"><span>2</span><div><h3>Selecione várias fotografias</h3><p>Até 30 por envio. Toque no botão e marque quantas quiser na galeria do celular.</p></div></div>
       <label className="admin-file-picker" htmlFor="admin-photo-files">
@@ -227,7 +227,7 @@ export function AdminPhotos() {
           placeholder="Ex.: autorização dos responsáveis, contrato nº 12"/>
       </label>
       <label className="admin-check"><input type="checkbox" required checked={confirmedRights} disabled={pending} onChange={e => setConfirmedRights(e.target.checked)}/> Confirmo que tenho autorização para usar todas as fotografias selecionadas, inclusive imagens de pessoas e menores.</label>
-      <label className="admin-check"><input type="checkbox" checked={publish} disabled={pending} onChange={e => setPublish(e.target.checked)}/> Mostrar no site após o envio <small>(se desmarcado, ficam em rascunho)</small></label>
+      <label className="admin-check"><input type="checkbox" checked={publish} disabled={pending} onChange={e => setPublish(e.target.checked)}/> Adicionar à galeria pública após o envio <small>(se desmarcado, ficam no acervo e ainda podem ser usadas nas páginas pelo editor)</small></label>
       {pending && <div className="admin-batch-progress" role="status" aria-live="polite">Enviando {progress.done} de {progress.total} fotografias. Mantenha esta página aberta.<progress max={progress.total || 1} value={progress.done}/></div>}
       <button type="submit" disabled={pending || toUpload.length === 0}>{pending ? "Enviando fotografias…" : toUpload.length ? "Enviar " + toUpload.length + " fotografias" : "Selecione as fotos para começar"}</button>
     </form>
