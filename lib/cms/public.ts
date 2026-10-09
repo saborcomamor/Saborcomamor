@@ -6,7 +6,7 @@ export async function getPublishedMediaAssignments():Promise<MediaAssignments>{
   if(!url||!key)return {};
   try {
     const response=await fetch(url+"/rest/v1/site_media_slots?select=slot_key,photo_id,published_storage_path,alt_text,caption&is_published=eq.true", {
-      headers:{apikey:key},next:{revalidate:30}
+      headers:{apikey:key},cache:"no-store"
     });
     if(!response.ok)return {};
     const entries=(await response.json()) as RecordRow[];
