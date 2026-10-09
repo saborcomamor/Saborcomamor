@@ -126,9 +126,15 @@
 .app-admin-more{border-top:1px solid #dfcdbc;margin-top:22px;padding-top:18px}
 .app-admin-more>summary{font-size:.91rem;cursor:pointer;font-weight:700}
 .app-intro-hint{font-size:.83rem;color:#75655b;margin:7px 0 15px}
-.app-intro-actions{display:flex;gap:9px;margin:16px 0}
-.app-intro-actions button{flex:1;border:1px solid #ccb9a6;border-radius:10px;background:#fff;color:#50372c;cursor:pointer;padding:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.85rem}
-.app-intro-actions button:disabled{opacity:.45}
+/* Compact mobile-first actions: two small preview links and one clear save CTA. */
+.app-intro-actions{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;margin:15px 0 18px;width:100%;min-width:0}
+.app-intro-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
+.app-intro-actions .app-intro-secondary button,
+.app-intro-actions .app-intro-secondary a{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:8px 10px;border:1px solid #ceb9a8;border-radius:10px;background:#fffcf8;color:#583c30;text-decoration:none;white-space:nowrap;font-size:.79rem;line-height:1.1;font-weight:600;cursor:pointer}
+.app-intro-actions .app-intro-secondary button:disabled{opacity:.5}
+.app-admin-root .app-intro-actions .app-intro-save.app-primary{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-width:0;min-height:46px;border:0;border-radius:10px;background:#583c30;color:#fff;font-size:.87rem;font-weight:700;line-height:1.2;padding:11px 15px}
+.app-admin-root .app-intro-actions .app-intro-save.app-primary:disabled{opacity:.5}
+@media(min-width:760px){.app-intro-actions{grid-template-columns:1fr minmax(175px,210px);align-items:center;gap:12px}.app-intro-secondary{display:flex}.app-intro-actions .app-intro-secondary>*{min-width:115px}}
 .app-intro-preview{position:fixed;inset:0;z-index:700;background:#1a100d;display:flex;align-items:center;justify-content:center}
 .app-intro-preview>img{height:100%;width:100%;object-fit:cover;animation:intro-preview-image .7s ease both}
 .app-intro-preview-text{position:absolute;bottom:clamp(65px,9vh,125px);left:0;right:0;text-align:center;color:white;font-size:.85rem;letter-spacing:.07em;text-shadow:0 2px 5px #0009}

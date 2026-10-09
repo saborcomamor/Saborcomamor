@@ -1,6 +1,6 @@
 "use client";
 import {useEffect,useMemo,useState} from "react";
-import {ArrowDown,ArrowUp,Check,Play,X} from "lucide-react";
+import {ArrowDown,ArrowUp,ArrowUpRight,Check,Play,X} from "lucide-react";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
 import {announceSitePublished} from "@/lib/cms/site-published";
 import {useRouter} from "next/navigation";
@@ -48,8 +48,20 @@ export function AdminIntro(){
   if(busy||!changed)return;
   const client=getSupabaseBrowser();if(!client)return;
   setBusy(true);setMessage("");
-  const {error}=await client.rpc("replace_intro_frames",{p_photo_ids:selected});
-  if(error){setMessage("Não foi possível salvar a sequência. Confira as fotos autorizadas.");setBusy(false);return;}
+  const {data,error}=await client.rpc("replace_intro_frames_v2",{p_photo_ids:selected});
+  if(error){
+   const code=error.code||"";
+   if(code==="42501")setMessage("Sua sessão não tem autorização administrativa. Entre novamente no painel.");
+   else if(code==="23514")setMessage("Uma foto não está disponível ou não tem autorização válida. Retire-a da seleção e tente novamente.");
+   else if(code==="22023")setMessage("A sequência contém uma foto inválida ou repetida. Confira a seleção.");
+   else setMessage("Erro ao salvar a entrada"+(code?" ("+code+")":"")+". Tente novamente. Se persistir, envie este código para verificarmos.");
+   setBusy(false);return;
+  }
+  if(!data||data.saved!==true||data.count!==selected.length||
+    !Array.isArray(data.photo_ids)||data.photo_ids.join(",")!==selected.join(",")){
+   setMessage("A gravação não retornou confirmação. A sequência antiga foi preservada.");
+   setBusy(false);return;
+  }
   const verify=await client.from("intro_frames").select("photo_id").order("sort_order");
   if(verify.error||(verify.data||[]).map(x=>x.photo_id).join(",")!==selected.join(",")){
    setMessage("A seleção foi enviada, mas não foi possível confirmar a ordem.");
@@ -78,10 +90,15 @@ export function AdminIntro(){
     </div>;
    })}</div>
   </details>}
-  <div className="app-intro-actions">
-   <button type="button" disabled={!selected.length} onClick={()=>setPreview(true)}><Play size={16}/> Ver sequência</button>
-   <a className="app-intro-preview-link" href="/?verEntrada=1" target="_blank" rel="noopener noreferrer">Visualizar no site ↗</a>
-   <button type="button" className="app-primary" onClick={()=>void save()} disabled={!changed||busy}>{busy?"Salvando…":"Salvar entrada"}</button>
+  <div className="app-intro-actions" role="group" aria-label="Ações da entrada">
+   <div className="app-intro-secondary">
+    <button type="button" className="app-intro-preview-button" disabled={!selected.length}
+      onClick={()=>setPreview(true)}><Play size={16}/> Prévia</button>
+    <a className="app-intro-preview-link" href="/?verEntrada=1" target="_blank"
+      rel="noopener noreferrer">Ver no site <ArrowUpRight size={16}/></a>
+   </div>
+   <button type="button" className="app-primary app-intro-save" onClick={()=>void save()}
+     disabled={!changed||busy}><Check size={17}/>{busy?"Salvando…":"Salvar alterações"}</button>
   </div>
   {message&&<p className="app-feedback" role="status">{message}</p>}
   {preview&&<div className="app-intro-preview" role="dialog" aria-modal="true" aria-label="Prévia da entrada">
