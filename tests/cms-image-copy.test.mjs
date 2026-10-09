@@ -23,10 +23,10 @@ test("imagem real não herda legenda da foto ilustrativa",()=>{
 });
 test("painel exibe texto antes de salvar e permite removê-lo",()=>{
  const editor=read("components/admin/AdminSiteMedia.tsx");
- assert.match(editor,/cms-current-copy/);
- assert.match(editor,/Texto sobre a nova fotografia/);
+ assert.match(editor,/app-compare/);
+ assert.match(editor,/Texto sobre a foto/);
  assert.match(editor,/p_caption:caption\.trim\(\)/);
- assert.match(editor,/ainda com imagens ilustrativas/);
+ assert.match(editor,/Imagem de exemplo/);
  assert.match(read("supabase/migrations/202610090006_media_caption_per_position.sql"),/p_caption text/);
 });
 test("alterações chegam ao site sem precisar novo build ou esperar cache de layout",()=>{
