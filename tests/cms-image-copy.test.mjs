@@ -30,5 +30,5 @@ test("painel exibe texto antes de salvar e permite removê-lo",()=>{
  assert.match(read("supabase/migrations/202610090006_media_caption_per_position.sql"),/p_caption text/);
 });
 test("alterações chegam ao site sem precisar novo build ou esperar cache de layout",()=>{
- assert.match(read("lib/cms/public.ts"),/cache:"no-store"/);
+ assert.match(read("lib/supabase/read-only.ts"),/cache:"no-store"/);
 });

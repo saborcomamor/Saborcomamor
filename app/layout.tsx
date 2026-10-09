@@ -1,9 +1,9 @@
 import type {Metadata,Viewport} from "next";
 import "./globals.css";
-import {SiteMediaProvider} from "@/lib/cms/media";
 import {SiteChrome} from "@/components/ui/SiteChrome";
 import {getPublishedMediaAssignments} from "@/lib/cms/public";
 import {getBusinessProfile,getVisualSettings} from "@/lib/public-dynamic";
+import {getPublishedServices} from "@/lib/cms/public-services";
 const metadataBase:Metadata={
  title:{default:"Sabor com Amor | Buffet em Telêmaco Borba",template:"%s | Sabor com Amor"},
  description:"Buffet completo e serviço de cozinha para celebrar com o sabor e o carinho de uma refeição em família, em Telêmaco Borba e região.",
@@ -20,11 +20,9 @@ export async function generateMetadata():Promise<Metadata>{
 }
 export const viewport:Viewport={width:"device-width",initialScale:1,themeColor:"#F6EFE5"};
 export default async function RootLayout({children}:Readonly<{children:React.ReactNode}>){
- const [media,profile,visual]=await Promise.all([getPublishedMediaAssignments(),getBusinessProfile(),getVisualSettings()]);
+ const [media,profile,visual,services]=await Promise.all([getPublishedMediaAssignments(),getBusinessProfile(),getVisualSettings(),getPublishedServices()]);
  return <html lang="pt-BR"><body>
   <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
-  <SiteMediaProvider items={media}>
-   <SiteChrome profile={profile} visual={visual}>{children}</SiteChrome>
-  </SiteMediaProvider>
+  <SiteChrome media={media} profile={profile} visual={visual} services={services}>{children}</SiteChrome>
  </body></html>;
 }

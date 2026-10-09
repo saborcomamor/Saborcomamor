@@ -2,6 +2,8 @@
 import {useEffect,useMemo,useRef,useState} from "react";
 import {ArrowDown,ArrowUp,Check,GripVertical,ImageUp,LoaderCircle,SlidersHorizontal,X} from "lucide-react";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
+import {announceSitePublished} from "@/lib/cms/site-published";
+import {useRouter} from "next/navigation";
 import {defaultFrame,type GallerySelection} from "@/lib/gallery-types";
 import {improvePhotoQuality} from "@/lib/cms/highres";
 type Photo={id:string;alt_text:string;published_storage_path:string|null;high_res_storage_path:string|null};
@@ -11,6 +13,7 @@ const img=(path:string|null)=>{
  return url&&path?url+"/storage/v1/object/public/sabor-publicadas/"+path.split("/").map(encodeURIComponent).join("/"):"";
 };
 export function AdminGallery(){
+ const router=useRouter();
  const [photos,setPhotos]=useState<Photo[]>([]);
  const [selected,setSelected]=useState<GallerySelection[]>([]);
  const [saved,setSaved]=useState<GallerySelection[]>([]);
@@ -67,7 +70,7 @@ export function AdminGallery(){
    &&v.fit_mode===selected[i]?.fit_mode&&v.focus_x===selected[i]?.focus_x
    &&v.focus_y===selected[i]?.focus_y&&Number(v.zoom)===Number(selected[i]?.zoom))
    &&(check.data||[]).length===selected.length;
-  if(verified){setSaved(selected.map(x=>({...x})));setConfirmEmpty(false);
+  if(verified){announceSitePublished();router.refresh();setSaved(selected.map(x=>({...x})));setConfirmEmpty(false);
    setFeedback("Publicado! A galeria usa somente estas "+selected.length+" foto(s), nesta ordem.");}
   else setFeedback("A atualização foi enviada, mas não foi possível confirmar. Atualize para conferir.");
   setBusy(false);
@@ -85,6 +88,7 @@ export function AdminGallery(){
   }
   await load();
   setEnhancing(false);setProgress("");
+  if(successes){announceSitePublished();router.refresh();}
   setFeedback(successes+" versão(ões) aprimorada(s)."+(failures?" "+failures+" falha(s); confira seus originais.":""));
  }
  if(loading)return <section className="app-page"><p role="status">Carregando galeria…</p></section>;

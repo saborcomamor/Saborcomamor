@@ -1,6 +1,8 @@
 "use client";
 import {useEffect,useState} from "react";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
+import {announceSitePublished} from "@/lib/cms/site-published";
+import {useRouter} from "next/navigation";
 import type {VisualSettings} from "@/lib/public-dynamic";
 const names:Record<VisualSettings["keepsakes_font"],string>={
  caveat:"Caveat — espontânea",
@@ -8,6 +10,7 @@ const names:Record<VisualSettings["keepsakes_font"],string>={
  allura:"Allura — caligrafia"
 };
 export function AdminVisualSettings(){
+ const router=useRouter();
  const [font,setFont]=useState<VisualSettings["keepsakes_font"]>("caveat");
  const [saved,setSaved]=useState<VisualSettings["keepsakes_font"]>("caveat");
  const [busy,setBusy]=useState(false);
@@ -22,10 +25,11 @@ export function AdminVisualSettings(){
  async function save(){
   const db=getSupabaseBrowser();if(!db)return;
   setBusy(true);setNotice("");
-  const {error}=await db.from("visual_settings").update({keepsakes_font:font}).eq("id",1);
+  const {data,error}=await db.from("visual_settings").update({keepsakes_font:font}).eq("id",1).select("keepsakes_font").single();
   setBusy(false);
-  if(error){setNotice("Não foi possível salvar a fonte.");return;}
-  setSaved(font);setNotice("Fonte publicada. Atualize a página inicial para conferir.");
+  if(error||data?.keepsakes_font!==font){setNotice("A fonte não foi confirmada pelo banco. Tente novamente.");return;}
+  announceSitePublished();router.refresh();
+  setSaved(font);setNotice("Fonte publicada e confirmada. A página será atualizada automaticamente.");
  }
  return <section className="app-page app-visual-settings">
   <div className="app-page-top"><h2>Fonte do manifesto</h2></div>

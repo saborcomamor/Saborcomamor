@@ -19,7 +19,8 @@ export function SplashIntro({frames}:{frames:IntroFrame[]}){
   setStage(null);
  },[]);
  useEffect(()=>{
-  try{if(sessionStorage.getItem("sabor-intro-v3-complete"))return;}catch{}
+  try{const force=new URLSearchParams(window.location.search).get("verEntrada")==="1";
+   if(!force&&sessionStorage.getItem("sabor-intro-v3-complete"))return;}catch{}
   setStage(frames.length?"photos":"original");
  },[frames.length]);
  useEffect(()=>{
