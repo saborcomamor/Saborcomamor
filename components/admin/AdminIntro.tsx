@@ -2,6 +2,8 @@
 import {useEffect,useMemo,useState} from "react";
 import {ArrowDown,ArrowUp,Check,Play,X} from "lucide-react";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
+import {announceSitePublished} from "@/lib/cms/site-published";
+import {useRouter} from "next/navigation";
 type Photo={id:string;published_storage_path:string|null;alt_text:string};
 type Entry={photo_id:string;sort_order:number};
 const photoUrl=(path:string|null)=>{
@@ -9,6 +11,7 @@ const photoUrl=(path:string|null)=>{
  return path&&base?base+"/storage/v1/object/public/sabor-publicadas/"+path.split("/").map(encodeURIComponent).join("/"):"";
 };
 export function AdminIntro(){
+ const router=useRouter();
  const [photos,setPhotos]=useState<Photo[]>([]);
  const [selected,setSelected]=useState<string[]>([]);
  const [saved,setSaved]=useState<string[]>([]);
@@ -36,7 +39,7 @@ export function AdminIntro(){
  useEffect(()=>{
   if(!preview)return;
   setPreviewIndex(0);
-  const timer=window.setInterval(()=>setPreviewIndex(i=>(i+1)%Math.max(1,selected.length)),700);
+  const timer=window.setInterval(()=>setPreviewIndex(i=>(i+1)%Math.max(1,selected.length)),2600);
   return()=>window.clearInterval(timer);
  },[preview,selected.length]);
  function toggle(id:string){setMessage("");setSelected(arr=>arr.includes(id)?arr.filter(v=>v!==id):arr.length<12?[...arr,id]:arr);}
@@ -50,7 +53,7 @@ export function AdminIntro(){
   const verify=await client.from("intro_frames").select("photo_id").order("sort_order");
   if(verify.error||(verify.data||[]).map(x=>x.photo_id).join(",")!==selected.join(",")){
    setMessage("A seleção foi enviada, mas não foi possível confirmar a ordem.");
-  }else {setSaved([...selected]);setMessage("Sequência salva. O site a utiliza na próxima visita.");}
+  }else {announceSitePublished();router.refresh();setSaved([...selected]);setMessage("Sequência publicada. Use “Visualizar no site” para conferir agora.");}
   setBusy(false);
  }
  const previewPhoto=byId.get(selected[previewIndex]||"");
@@ -77,6 +80,7 @@ export function AdminIntro(){
   </details>}
   <div className="app-intro-actions">
    <button type="button" disabled={!selected.length} onClick={()=>setPreview(true)}><Play size={16}/> Ver sequência</button>
+   <a className="app-intro-preview-link" href="/?verEntrada=1" target="_blank" rel="noopener noreferrer">Visualizar no site ↗</a>
    <button type="button" className="app-primary" onClick={()=>void save()} disabled={!changed||busy}>{busy?"Salvando…":"Salvar entrada"}</button>
   </div>
   {message&&<p className="app-feedback" role="status">{message}</p>}

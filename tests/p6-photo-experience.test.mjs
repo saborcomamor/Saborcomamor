@@ -24,10 +24,10 @@ test("manifesto permite fontes no CMS e revela textos conforme scroll",()=>{
 
 test("galeria fullscreen apresenta somente itens selecionados sem duplicar faixa",()=>{
  const component=read("components/gallery/GalleryCollection.tsx");
- assert.match(component,/items\[active\]/);
+ assert.match(component,/items\[shownIndex\]/);
  assert.match(component,/gallery-fullscreen-photo/);
  assert.doesNotMatch(component,/\.\.\.film|gallery-film-track|gallery-photo-editorial/);
- assert.match(read("lib/supabase/public.ts"),/gallery_entries\?select=/);
+ assert.match(read("lib/supabase/public.ts"),/from\("gallery_entries"\)/);
  assert.doesNotMatch(read("lib/supabase/public.ts"),/from\("photos"\)|uploaded\.length\?/);
  const settings=read("components/admin/AdminGallery.tsx");
  assert.match(settings,/publish_gallery_layout/);

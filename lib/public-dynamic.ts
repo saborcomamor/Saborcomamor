@@ -1,4 +1,5 @@
-export type BusinessProfile = {
+import {getPublicDatabase} from "@/lib/supabase/read-only";
+export type BusinessProfile={
  business_name:string;city:string;whatsapp:string;telephone:string;email:string;
  address:string;hours:string;instagram:string;facebook:string;
 };
@@ -7,35 +8,33 @@ export const defaultBusiness:BusinessProfile={
  email:"",address:"",hours:"",instagram:"",facebook:""
 };
 export type IntroFrame={id:string;src:string;alt:string;sort_order:number};
-const base=()=>process.env.NEXT_PUBLIC_SUPABASE_URL;
-const publicKey=()=>process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-async function getRows<T>(table:string,params:string):Promise<T[]>{
- const url=base(),key=publicKey();if(!url||!key)return [];
- try{
-  const response=await fetch(url+"/rest/v1/"+table+"?"+params,{
-    headers:{apikey:key},cache:"no-store"
-  });
-  if(!response.ok)return [];
-  return await response.json() as T[];
- }catch{return [];}
-}
-export async function getBusinessProfile():Promise<BusinessProfile>{
- const rows=await getRows<BusinessProfile>("business_profile","select=business_name,city,whatsapp,telephone,email,address,hours,instagram,facebook&id=eq.1&limit=1");
- return {...defaultBusiness,...rows[0]};
-}
-export async function getIntroFrames():Promise<IntroFrame[]>{
- type Row={photo_id:string;published_storage_path:string;alt_text:string;sort_order:number};
- const rows=await getRows<Row>("intro_frames","select=photo_id,published_storage_path,alt_text,sort_order&order=sort_order.asc");
- const url=base();if(!url)return [];
- return rows.filter(r=>/^[a-zA-Z0-9_.\/-]+$/.test(r.published_storage_path)).map(r=>({
-  id:r.photo_id,alt:r.alt_text,sort_order:r.sort_order,
-  src:url+"/storage/v1/object/public/sabor-publicadas/"+r.published_storage_path.split("/").map(encodeURIComponent).join("/")
- }));
-}
-
 export type VisualSettings={keepsakes_font:"caveat"|"dancing"|"allura";favicon_path:string;favicon_version:string};
 export const defaultVisual:VisualSettings={keepsakes_font:"caveat",favicon_path:"",favicon_version:""};
+export async function getBusinessProfile():Promise<BusinessProfile>{
+ const db=getPublicDatabase();if(!db)return defaultBusiness;
+ const {data,error}=await db.from("business_profile")
+  .select("business_name,city,whatsapp,telephone,email,address,hours,instagram,facebook")
+  .eq("id",1).maybeSingle();
+ if(error){console.error("Failed to load public business details",error);return defaultBusiness;}
+ return {...defaultBusiness,...data};
+}
 export async function getVisualSettings():Promise<VisualSettings>{
- const rows=await getRows<VisualSettings>("visual_settings","select=keepsakes_font,favicon_path,favicon_version&id=eq.1&limit=1");
- return {...defaultVisual,...rows[0]};
+ const db=getPublicDatabase();if(!db)return defaultVisual;
+ const {data,error}=await db.from("visual_settings")
+  .select("keepsakes_font,favicon_path,favicon_version").eq("id",1).maybeSingle();
+ if(error){console.error("Failed to load published visual settings",error);return defaultVisual;}
+ return {...defaultVisual,...data};
+}
+export async function getIntroFrames():Promise<IntroFrame[]>{
+ const db=getPublicDatabase(),url=process.env.NEXT_PUBLIC_SUPABASE_URL;
+ if(!db||!url)return [];
+ const {data,error}=await db.from("intro_frames")
+  .select("photo_id,published_storage_path,alt_text,sort_order").order("sort_order",{ascending:true});
+ if(error){console.error("Failed to load intro frames",error);return [];}
+ return (data||[]).filter(x=>/^[a-zA-Z0-9_.\/-]+$/.test(x.published_storage_path))
+  .map(x=>({
+   id:x.photo_id,sort_order:x.sort_order,alt:x.alt_text,
+   src:url+"/storage/v1/object/public/sabor-publicadas/"+
+    x.published_storage_path.split("/").map(encodeURIComponent).join("/")
+  }));
 }

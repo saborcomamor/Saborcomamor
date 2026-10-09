@@ -1,6 +1,8 @@
 "use client";
 import {useEffect,useState,type FormEvent} from "react";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
+import {announceSitePublished} from "@/lib/cms/site-published";
+import {useRouter} from "next/navigation";
 import {type BusinessProfile,defaultBusiness} from "@/lib/public-dynamic";
 const fields:[
  keyof BusinessProfile,string,string
@@ -16,6 +18,7 @@ const fields:[
  ["facebook","Link do Facebook","url"]
 ];
 export function AdminBusinessProfile(){
+ const router=useRouter();
  const [profile,setProfile]=useState<BusinessProfile>(defaultBusiness);
  const [loading,setLoading]=useState(true);
  const [saving,setSaving]=useState(false);
@@ -33,10 +36,11 @@ export function AdminBusinessProfile(){
   if(whatsapp&& (whatsapp.length<10||whatsapp.length>15)){setMessage("Informe o WhatsApp com DDD.");return;}
   setSaving(true);setMessage("");
   const payload={...profile,whatsapp};
-  const {error}=await client.from("business_profile").upsert({id:1,...payload},{onConflict:"id"});
+  const {data,error}=await client.from("business_profile").upsert({id:1,...payload},{onConflict:"id"}).select("business_name,city,whatsapp,telephone,email,address,hours,instagram,facebook").single();
   setSaving(false);
-  if(error){setMessage("Não foi possível salvar. Verifique os campos.");return;}
-  setProfile(payload);setMessage("Informações salvas. Atualize o site público para conferir.");
+  if(error||!data||Object.keys(payload).some(key=>data[key as keyof BusinessProfile]!==payload[key as keyof BusinessProfile])){setMessage("As informações não foram confirmadas pelo banco. Confira os campos.");return;}
+  announceSitePublished();router.refresh();
+  setProfile(payload);setMessage("Informações publicadas e conferidas no banco.");
  }
  return <section className="app-business" aria-labelledby="admin-business-title">
   <h3 id="admin-business-title">Informações do negócio</h3>

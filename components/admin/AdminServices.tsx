@@ -1,15 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
+import {announceSitePublished} from "@/lib/cms/site-published";
+import {useRouter} from "next/navigation";
 type Service = {code:string;title:string;summary:string;is_published:boolean};
-export function AdminServices(){const [items,setItems]=useState<Service[]>([]);const [message,setMessage]=useState("");
+export function AdminServices(){const router=useRouter();const [items,setItems]=useState<Service[]>([]);const [message,setMessage]=useState("");
  async function load(){const client=getSupabaseBrowser();if(!client)return;
  const {data,error}=await client.from("services").select("code,title,summary,is_published").order("sort_order");
  if(error)setMessage("Não foi possível carregar os serviços.");else setItems((data??[]) as Service[]);}
  useEffect(()=>{void load();},[]);
  async function save(item:Service){const client=getSupabaseBrowser();if(!client)return;
- const {error}=await client.from("services").update({summary:item.summary,is_published:item.is_published}).eq("code",item.code);
- setMessage(error?"Não foi possível salvar.":"Serviço atualizado.");if(!error)await load();}
+ const {data,error}=await client.from("services").update({summary:item.summary,is_published:item.is_published}).eq("code",item.code).select("summary,is_published").single();
+ if(error||data?.summary!==item.summary||data?.is_published!==item.is_published){setMessage("Não foi possível confirmar o salvamento.");return;}
+ if(item.is_published){announceSitePublished();router.refresh();}
+ setMessage(item.is_published?"Texto publicado e confirmado no site.":"Rascunho salvo. Marque Publicar para aparecer no site.");await load();}
  return <section className="admin-panel" aria-labelledby="services-title"><h2 id="services-title">Modalidades de contratação</h2>
  <p>Revise os textos antes de publicar. O conteúdo visual das páginas permanece separado do cadastro.</p>
  {items.map(item=><div className="admin-service" key={item.code}><h3>{item.title}</h3>

@@ -1,11 +1,14 @@
 "use client";
 import {useEffect,useState,type ChangeEvent} from "react";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
+import {announceSitePublished} from "@/lib/cms/site-published";
+import {useRouter} from "next/navigation";
 function faviconUrl(path:string){
  const base=process.env.NEXT_PUBLIC_SUPABASE_URL;
  return base&&path?base+"/storage/v1/object/public/sabor-identidade/"+path:"";
 }
 export function AdminFavicon(){
+ const router=useRouter();
  const [path,setPath]=useState("");
  const [loading,setLoading]=useState(true);
  const [busy,setBusy]=useState(false);
@@ -33,18 +36,20 @@ export function AdminFavicon(){
   const target="favicons/"+crypto.randomUUID()+".png";
   const uploadResult=await db.storage.from("sabor-identidade").upload(target,file,{contentType:"image/png",upsert:false});
   if(uploadResult.error){setMessage("Falha no envio do favicon.");setBusy(false);return;}
-  const {error}=await db.from("visual_settings").update({
+  const {data,error}=await db.from("visual_settings").update({
    favicon_path:target,favicon_version:String(Date.now())
-  }).eq("id",1);
+  }).eq("id",1).select("favicon_path").single();
   setBusy(false);
-  if(error){setMessage("Imagem enviada, mas não foi possível publicar o favicon.");return;}
+  if(error||data?.favicon_path!==target){setMessage("Imagem enviada, mas a publicação não foi confirmada. Tente novamente.");return;}
+  announceSitePublished();router.refresh();
   setPath(target);setMessage("Favicon atualizado. Alguns navegadores demoram para renovar o cache.");
  }
  async function restore(){
   const db=getSupabaseBrowser();if(!db)return;setBusy(true);
-  const {error}=await db.from("visual_settings").update({favicon_path:"",favicon_version:String(Date.now())}).eq("id",1);
+  const {data,error}=await db.from("visual_settings").update({favicon_path:"",favicon_version:String(Date.now())}).eq("id",1).select("favicon_path").single();
   setBusy(false);
-  if(error){setMessage("Falha ao restaurar ícone.");return;}
+  if(error||data?.favicon_path!==""){setMessage("O ícone anterior não pôde ser restaurado.");return;}
+  announceSitePublished();router.refresh();
   setPath("");setMessage("Ícone padrão restaurado.");
  }
  return <section className="app-favicon" aria-label="Favicon do site">

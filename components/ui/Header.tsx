@@ -3,7 +3,9 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { nav } from "@/lib/site";
+import {useBusinessProfile} from "@/lib/business-client";
 export function Header(){
+ const business=useBusinessProfile();
  const [open,setOpen]=useState(false);
  const menuButton=useRef<HTMLButtonElement>(null); const menuRoot=useRef<HTMLElement>(null);
  const [scrolled,setScrolled]=useState(false);
@@ -28,7 +30,7 @@ export function Header(){
    return ()=>{document.body.classList.remove("menu-open");document.removeEventListener("keydown",onKey)};
  },[open]);
  return <header className={`site-header ${scrolled?"is-scrolled":""}`}>
-  <div className="header-inner"><Link href="/" className="wordmark" onClick={()=>setOpen(false)} aria-label="Sabor com Amor, voltar ao início"><span className="wordmark-small">BUFFET</span><strong>Sabor <em>com</em> Amor</strong><span className="wordmark-rule"/></Link>
+  <div className="header-inner"><Link href="/" className="wordmark" onClick={()=>setOpen(false)} aria-label={business.business_name+", voltar ao início"}><span className="wordmark-small">BUFFET</span><strong>{business.business_name==="Sabor com Amor"?<>Sabor <em>com</em> Amor</>:business.business_name}</strong><span className="wordmark-rule"/></Link>
   <nav className="desktop-nav" aria-label="Navegação principal">{nav.map(item=><Link key={item.href} href={item.href}>{item.label}</Link>)}</nav>
   <Link href="/orcamento" className="header-quote">Fale com a gente <ArrowUpRight size={16}/></Link>
   <button ref={menuButton} aria-label={open?"Fechar menu":"Abrir menu"} aria-expanded={open} aria-controls="mobile-menu" className="menu-trigger" onClick={()=>setOpen(v=>!v)}>{open?<X/>:<Menu/>}</button></div>

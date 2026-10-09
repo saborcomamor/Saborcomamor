@@ -2,6 +2,8 @@
 import {useEffect,useMemo,useState} from "react";
 import {ArrowUpRight,Check,RotateCcw,X} from "lucide-react";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
+import {announceSitePublished} from "@/lib/cms/site-published";
+import {useRouter} from "next/navigation";
 import {MEDIA_SLOTS,type MediaSlot} from "@/lib/cms/slots";
 import {mediaSlotPresentation} from "@/lib/cms/slot-presentation";
 import {photo} from "@/lib/photos";
@@ -28,6 +30,7 @@ const imageUrl=(path:string|null)=>{
  return base&&path?base+"/storage/v1/object/public/sabor-publicadas/"+path.split("/").map(encodeURIComponent).join("/"):"";
 };
 export function AdminSiteMedia(){
+ const router=useRouter();
  const [page,setPage]=useState("home");
  const [section,setSection]=useState("Abertura / Hero");
  const [assigned,setAssigned]=useState<Assignment[]>([]);
@@ -83,7 +86,7 @@ export function AdminSiteMedia(){
   const check=await client.from("site_media_slots").select("photo_id,caption").eq("slot_key",selected.key).maybeSingle();
   if(check.error||check.data?.photo_id!==choice||check.data?.caption!==caption.trim())
    setMessage("Alteração enviada, mas não foi possível confirmar. Atualize e confira.");
-  else {setCurrent(null);setMessage("Foto atualizada nesta posição.");await refresh();}
+  else {announceSitePublished();router.refresh();setCurrent(null);setMessage("Foto atualizada e conferida nesta posição.");await refresh();}
   setBusy(false);
  }
  async function restore(){
@@ -92,7 +95,11 @@ export function AdminSiteMedia(){
   setBusy(true);
   const {error}=await client.rpc("clear_site_media_slot",{p_slot_key:selected.key});
   if(error)setMessage("Falha ao restaurar.");
-  else{setCurrent(null);setMessage("Imagem anterior restaurada.");await refresh();}
+  else{
+   const check=await client.from("site_media_slots").select("slot_key").eq("slot_key",selected.key).maybeSingle();
+   if(check.error||check.data){setMessage("Não foi possível confirmar a restauração.");}
+   else{announceSitePublished();router.refresh();setCurrent(null);setMessage("Imagem anterior restaurada e conferida.");await refresh();}
+  }
   setBusy(false);
  }
  const pageInfo=pages.find(p=>p.id===page);
