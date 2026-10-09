@@ -85,3 +85,21 @@ test("entrada usa RPC v2 com verificação explícita e interface compacta",()=>
  assert.match(sql,/photo_approvals/);
  assert.match(sql,/REVOKE ALL ON FUNCTION/);
 });
+
+test("CMS replace functions never DELETE entire selection without explicit WHERE",()=>{
+ const source=read("supabase/migrations/202610090012_fix_safeupdate_replace_sequences.sql");
+ assert.match(source,/DELETE FROM public\.intro_frames WHERE photo_id IS NOT NULL/);
+ assert.match(source,/DELETE FROM public\.gallery_entries WHERE photo_id IS NOT NULL/);
+ assert.doesNotMatch(source,/DELETE FROM public\.(intro_frames|gallery_entries)\s*;/);
+ assert.match(source,/replace_intro_frames_v2/);
+ assert.match(source,/publish_gallery_layout/);
+});
+test("intro compact controls never stretch to the width of the screen",()=>{
+ const editor=read("components/admin/AdminIntro.tsx");
+ const css=read("styles/admin/AppCMS.css");
+ assert.match(editor,/>Salvar<\/button>|\{busy\?"Salvando…":"Salvar"\}/);
+ assert.match(editor,/app-intro-secondary/);
+ assert.match(css,/\.app-admin-root \.app-intro-actions\{\s*display:flex/);
+ assert.match(css,/\.app-intro-save\.app-primary\{\s*display:inline-flex/);
+ assert.match(css,/flex:0 0 auto;width:auto/);
+});

@@ -186,3 +186,36 @@
 .app-photo-delete>button:not(.app-delete-action){border:1px solid #d5c3b2;background:white;padding:12px;border-radius:10px}
 .app-protected-photo{font-size:.78rem;color:#725d50;line-height:1.55;margin-top:15px}
 @media(max-width:420px){.app-font-sample{font-size:2.25rem}.app-font-sample.sample-dancing{font-size:1.95rem}.app-font-sample.sample-allura{font-size:2.75rem}}
+
+/* Compact mobile action rail: do not stretch controls into large cards */
+.app-admin-root .app-intro-actions{
+ display:flex;flex-direction:row;align-items:center;justify-content:space-between;
+ gap:8px;margin:14px 0 17px;width:100%;min-width:0;
+}
+.app-admin-root .app-intro-actions .app-intro-secondary{
+ display:flex;flex:0 1 auto;align-items:center;gap:clamp(4px,2vw,13px);
+ min-width:0;
+}
+.app-admin-root .app-intro-actions .app-intro-secondary button,
+.app-admin-root .app-intro-actions .app-intro-secondary a{
+ display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:4px;
+ width:auto;min-width:0;min-height:44px;padding:8px 3px;
+ border:0;border-radius:0;background:transparent;box-shadow:none;
+ color:#5b4437;font-size:.8rem;font-weight:600;line-height:1.2;text-decoration:none;
+ white-space:nowrap;
+}
+.app-admin-root .app-intro-actions .app-intro-secondary a{border-bottom:1px solid #ba9d85}
+.app-admin-root .app-intro-actions .app-intro-secondary button:focus-visible,
+.app-admin-root .app-intro-actions .app-intro-secondary a:focus-visible,
+.app-admin-root .app-intro-actions .app-intro-save:focus-visible{outline:2px solid #b87655;outline-offset:3px}
+.app-admin-root .app-intro-actions .app-intro-save.app-primary{
+ display:inline-flex;align-items:center;justify-content:center;gap:6px;
+ flex:0 0 auto;width:auto;min-width:0;max-width:135px;min-height:44px;
+ border-radius:10px;border:0;padding:10px 13px;background:#583c30;
+ font-size:.83rem;font-weight:750;line-height:1.15;color:#fff;
+}
+@media(max-width:390px){
+ .app-admin-root .app-intro-actions .app-intro-secondary button,
+ .app-admin-root .app-intro-actions .app-intro-secondary a{font-size:.74rem}
+ .app-admin-root .app-intro-actions .app-intro-save.app-primary{padding:10px 11px;font-size:.78rem}
+}

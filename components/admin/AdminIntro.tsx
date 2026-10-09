@@ -95,10 +95,10 @@ export function AdminIntro(){
     <button type="button" className="app-intro-preview-button" disabled={!selected.length}
       onClick={()=>setPreview(true)}><Play size={16}/> Prévia</button>
     <a className="app-intro-preview-link" href="/?verEntrada=1" target="_blank"
-      rel="noopener noreferrer">Ver no site <ArrowUpRight size={16}/></a>
+      rel="noopener noreferrer">Ver site <ArrowUpRight size={15}/></a>
    </div>
    <button type="button" className="app-primary app-intro-save" onClick={()=>void save()}
-     disabled={!changed||busy}><Check size={17}/>{busy?"Salvando…":"Salvar alterações"}</button>
+     disabled={!changed||busy}><Check size={17}/>{busy?"Salvando…":"Salvar"}</button>
   </div>
   {message&&<p className="app-feedback" role="status">{message}</p>}
   {preview&&<div className="app-intro-preview" role="dialog" aria-modal="true" aria-label="Prévia da entrada">
