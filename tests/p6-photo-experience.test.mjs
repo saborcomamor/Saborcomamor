@@ -3,14 +3,23 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 const read=(path)=>readFileSync(new URL("../"+path,import.meta.url),"utf8");
 
-test("cada foto da overlay precisa de um gesto e não tem botão continuar",()=>{
+test("fotos entram sozinhas em pilha e um único gesto revela a segunda overlay",()=>{
  const component=read("components/home/SplashIntro.tsx");
- assert.match(component,/active>=frames\.length-1/);
- assert.match(component,/setActive\(i=>i\+1\)/);
+ const css=read("styles/home/PhotoIntro.css");
+ assert.match(component,/frames\.map\(\(frame,index\)/);
+ assert.match(component,/index\*PHOTO_STEP_MS/);
+ assert.match(component,/setReady\(true\)/);
+ assert.match(component,/releaseStack/);
  assert.match(component,/onPointerUp/);
- assert.match(component,/Math\.abs\(dx\)/);
- assert.doesNotMatch(component,/setInterval|setTop\(i=>i\+1\)|photo-intro-skip|>Continuar</);
- assert.match(read("styles/home/PhotoIntro.css"),/photo-intro-expand/);
+ assert.match(component,/setStage\("original"\)/);
+ assert.match(component,/photo-intro-underlay/);
+ assert.match(component,/sabor-intro-v4-complete/);
+ assert.match(component,/Arraste para o lado/);
+ assert.doesNotMatch(component,/setActive\(i=>i\+1\)|setActive\(active\+1\)|>Continuar</);
+ assert.match(css,/photo-intro-arrive/);
+ assert.match(css,/photo-intro-sweep/);
+ assert.match(css,/--exit-delay/);
+ assert.match(css,/prefers-reduced-motion/);
 });
 
 test("manifesto permite fontes no CMS e revela textos conforme scroll",()=>{
