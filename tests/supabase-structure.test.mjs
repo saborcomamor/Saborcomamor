@@ -16,7 +16,7 @@ test("Supabase tem migrações distintas e proteção de publicação",()=>{
  assert.match(harden,/REVOKE EXECUTE ON FUNCTION public\.approve_photo_rights\(uuid,text\) FROM anon/);
 });
 test("painel é modular, não cria usuário nem usa segredo de serviço",()=>{
- for(const n of ["AdminDashboard","AdminSignIn","AdminAlbums","AdminPhotos","AdminServices"])
+ for(const n of ["AdminDashboard","AdminSignIn","PhotoUploader","AdminPhotos","AdminGallery","AdminSiteMedia","AdminServices"])
   assert.ok(existsSync(new URL(`components/admin/${n}.tsx`,base)),n);
  const ts=read("lib/supabase/browser.ts");
  assert.ok(ts.includes("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"));
