@@ -1,84 +1,100 @@
 "use client";
 import {useEffect,useMemo,useState} from "react";
+import {ArrowDown,ArrowUp,Check,LoaderCircle} from "lucide-react";
 import {getSupabaseBrowser} from "@/lib/supabase/browser";
-
-type Photo={id:string;alt_text:string;caption:string;album_id:string|null;is_published:boolean;published_storage_path:string|null};
-type Album={id:string;title:string;is_published:boolean};
-function imageUrl(path:string|null){
- const base=process.env.NEXT_PUBLIC_SUPABASE_URL||"";
- return path&&base?base+"/storage/v1/object/public/sabor-publicadas/"+path.split("/").map(encodeURIComponent).join("/"):null;
-}
+type Photo={id:string;alt_text:string;published_storage_path:string|null};
+type Entry={photo_id:string;sort_order:number};
+const img=(path:string|null)=>{
+ const url=process.env.NEXT_PUBLIC_SUPABASE_URL;
+ return url&&path?url+"/storage/v1/object/public/sabor-publicadas/"+path.split("/").map(encodeURIComponent).join("/"):"";
+};
 export function AdminGallery(){
  const [photos,setPhotos]=useState<Photo[]>([]);
- const [albums,setAlbums]=useState<Album[]>([]);
  const [selected,setSelected]=useState<string[]>([]);
- const [filter,setFilter]=useState("all");
- const [albumFilter,setAlbumFilter]=useState("");
- const [query,setQuery]=useState("");
- const [loading,setLoading]=useState(true);
+ const [saved,setSaved]=useState<string[]>([]);
  const [busy,setBusy]=useState(false);
- const [message,setMessage]=useState("");
- const visible=useMemo(()=>photos.filter(p=>
-   (filter==="all"||(filter==="shown"&&p.is_published)||(filter==="hidden"&&!p.is_published)) &&
-   (!albumFilter||p.album_id===albumFilter) &&
-   (!query||(p.alt_text+" "+p.caption).toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR")))
- ),[photos,filter,albumFilter,query]);
- const published=photos.filter(p=>p.is_published).length;
- async function refresh(){
-   const client=getSupabaseBrowser();if(!client)return;
-   const [a,b]=await Promise.all([
-     client.from("photos").select("id,alt_text,caption,album_id,is_published,published_storage_path").order("created_at",{ascending:false}),
-     client.from("albums").select("id,title,is_published")
-   ]);
-   if(a.error||b.error)setMessage("Não foi possível carregar as fotos.");
-   else {setPhotos((a.data||[]) as Photo[]);setAlbums((b.data||[]) as Album[]);}
-   setLoading(false);
+ const [loading,setLoading]=useState(true);
+ const [feedback,setFeedback]=useState("");
+ const [confirmEmpty,setConfirmEmpty]=useState(false);
+ const byId=useMemo(()=>new Map(photos.map(p=>[p.id,p])),[photos]);
+ const dirty=selected.join(",")!==saved.join(",");
+ async function load(){
+  const client=getSupabaseBrowser();if(!client){setFeedback("Conexão indisponível.");setLoading(false);return;}
+  const [library,entries]=await Promise.all([
+   client.from("photos").select("id,alt_text,published_storage_path").order("created_at",{ascending:false}),
+   client.from("gallery_entries").select("photo_id,sort_order").order("sort_order",{ascending:true})
+  ]);
+  if(library.error||entries.error){setFeedback("Falha ao carregar a galeria. Atualize a página.");setLoading(false);return;}
+  const all=(library.data||[]) as Photo[];
+  const order=(entries.data||[] as Entry[]).map(x=>x.photo_id);
+  setPhotos(all);
+  setSaved(order);
+  setSelected(order);
+  setLoading(false);
  }
- useEffect(()=>{void refresh();},[]);
- function toggle(id:string){setSelected(prev=>prev.includes(id)?prev.filter(v=>v!==id):[...prev,id]);}
- async function setVisible(shouldShow:boolean,ids:string[]){
-   if(!ids.length)return;
-   setBusy(true);setMessage("");
-   const client=getSupabaseBrowser();
-   if(!client){setMessage("Conexão indisponível.");setBusy(false);return;}
-   const {error}=await client.from("photos").update({is_published:shouldShow}).in("id",ids);
-   if(error)setMessage("Não foi possível mudar a publicação. Confirme as autorizações das fotografias.");
-   else {setMessage(ids.length+" foto(s) "+(shouldShow?"adicionada(s) à galeria.":"retirada(s) da galeria.")+" Isso não afeta as imagens configuradas em Editar o site.");setSelected([]);await refresh();}
-   setBusy(false);
+ useEffect(()=>{void load();},[]);
+ function toggle(id:string){
+   setFeedback("");
+   setConfirmEmpty(false);
+   setSelected(prev=>prev.includes(id)?prev.filter(x=>x!==id):[...prev,id]);
  }
- if(loading)return <section className="admin-panel"><p>Carregando galeria…</p></section>;
- return <section className="cms-shell cms-gallery-manager">
-   <div className="cms-heading"><p className="eyebrow">GALERIA PÚBLICA</p><h2>Escolha o que mostrar.</h2>
-     <p>Aqui você controla somente as imagens da página <b>Galeria</b>. Esconder uma foto daqui não remove seu arquivo do banco, nem altera fotos da Hero ou das animações.</p></div>
-   <div className="cms-summary"><strong>{photos.length}</strong><span>fotos no banco</span><strong>{published}</strong><span>na galeria</span></div>
-   <div className="cms-dialog-tools">
-     <label>Mostrar<select value={filter} onChange={e=>{setFilter(e.target.value);setSelected([]);}}>
-       <option value="all">Todas</option><option value="shown">Publicadas</option><option value="hidden">Só no banco</option>
-     </select></label>
-     <label>Álbum<select value={albumFilter} onChange={e=>{setAlbumFilter(e.target.value);setSelected([]);}}>
-       <option value="">Todos os álbuns</option>{albums.map(a=><option value={a.id} key={a.id}>{a.title}</option>)}
-     </select></label>
-     <label>Buscar<input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Descrição ou legenda"/></label>
-   </div>
-   <div className="cms-bulk-bar"><span>{selected.length} selecionada(s)</span>
-     <button type="button" onClick={()=>setSelected(visible.map(p=>p.id))} disabled={busy}>Selecionar as visíveis</button>
-     <button type="button" onClick={()=>setSelected([])} disabled={busy}>Limpar</button>
-     <button type="button" onClick={()=>void setVisible(true,selected)} disabled={busy||!selected.length}>Mostrar na galeria</button>
-     <button type="button" onClick={()=>void setVisible(false,selected)} disabled={busy||!selected.length} className="cms-hide">Retirar da galeria</button>
-   </div>
-   <div className="cms-gallery-grid">{visible.map(p=>{
-    const album=albums.find(a=>a.id===p.album_id);
-    const actuallyVisible=p.is_published && (!album||album.is_published);
-    return <label className={"cms-gallery-photo "+(selected.includes(p.id)?"checked":"")} key={p.id}>
-      <div className="cms-gallery-picture">{imageUrl(p.published_storage_path)?
-       <img src={imageUrl(p.published_storage_path)!} alt={p.alt_text} loading="lazy"/>:<span>Imagem não disponível</span>}
-       <input type="checkbox" disabled={busy} checked={selected.includes(p.id)} onChange={()=>toggle(p.id)} aria-label={"Selecionar "+p.alt_text}/>
-      </div>
-      <strong>{p.caption||p.alt_text}</strong>
-      <small>{album?.title||"Sem álbum"} · {actuallyVisible?"Visível na galeria":p.is_published?"Álbum em rascunho":"Só no banco"}</small>
-     </label>;
-   })}</div>
-   {visible.length===0&&<p className="cms-empty">Nenhuma foto corresponde aos filtros.</p>}
-   {message&&<p role="status" className="cms-feedback">{message}</p>}
+ function move(index:number,delta:number){
+   const to=index+delta;
+   if(to<0||to>=selected.length)return;
+   setSelected(previous=>{
+    const next=[...previous];[next[index],next[to]]=[next[to],next[index]];return next;
+   });
+ }
+ async function publish(){
+  if(busy||!dirty)return;
+  if(selected.length===0&&!confirmEmpty){setConfirmEmpty(true);setFeedback("Confirme para deixar a galeria vazia.");return;}
+  const client=getSupabaseBrowser();if(!client)return;
+  setBusy(true);setFeedback("");
+  const {error}=await client.rpc("replace_gallery_selection",{p_photo_ids:selected});
+  if(error){setFeedback("Não foi possível salvar. Verifique as fotos e tente novamente.");setBusy(false);return;}
+  const {data, error:checkError}=await client.from("gallery_entries").select("photo_id,sort_order").order("sort_order");
+  const verified=!checkError&&(data||[]).map(x=>x.photo_id).join(",")===selected.join(",");
+  if(verified){setSaved([...selected]);setConfirmEmpty(false);setFeedback("Galeria atualizada: "+selected.length+" foto(s) na ordem escolhida.");}
+  else setFeedback("A atualização foi enviada, mas não foi possível confirmá-la. Atualize a tela para conferir.");
+  setBusy(false);
+ }
+ if(loading)return <section className="app-page"><p role="status">Carregando galeria…</p></section>;
+ return <section className="app-page" aria-labelledby="gallery-editor-title">
+  <div className="app-page-top"><h2 id="gallery-editor-title">Galeria</h2><span>{selected.length} foto(s)</span></div>
+  <div className="app-gallery-actions">
+   <button type="button" onClick={()=>{setSelected(photos.filter(x=>!!x.published_storage_path).map(x=>x.id));setConfirmEmpty(false);}}>Selecionar todas</button>
+   <button type="button" onClick={()=>{setSelected([]);setConfirmEmpty(false);}}>Limpar</button>
+   <a href="/galeria" target="_blank" rel="noopener noreferrer">Ver galeria ↗</a>
+  </div>
+  <div className="app-gallery-grid" aria-label="Fotografias disponíveis">
+   {photos.filter(x=>!!x.published_storage_path).map(p=>{
+    const position=selected.indexOf(p.id);
+    return <button key={p.id} type="button" className={"app-tile "+(position>=0?"is-selected":"")} aria-pressed={position>=0}
+       aria-label={(position>=0?"Remover da galeria: ":"Incluir na galeria: ")+p.alt_text} onClick={()=>toggle(p.id)}>
+      <img src={img(p.published_storage_path)} alt={p.alt_text} loading="lazy"/>
+      {position>=0&&<span className="app-tile-count"><Check size={13}/> {position+1}</span>}
+    </button>;
+   })}
+  </div>
+  {selected.length>1&&<div className="app-gallery-order">
+    <h3>Ordem na galeria</h3>
+    <div className="app-gallery-order-list">{selected.map((id,i)=>{
+     const p=byId.get(id);if(!p)return null;
+     return <div className="app-gallery-order-item" key={id}>
+      <img src={img(p.published_storage_path)} alt="" loading="lazy"/>
+      <span>Foto {i+1}</span>
+      <button aria-label={"Mover foto "+(i+1)+" para a esquerda"} disabled={i===0||busy} onClick={()=>move(i,-1)} type="button"><ArrowUp size={17}/></button>
+      <button aria-label={"Mover foto "+(i+1)+" para a direita"} disabled={i===selected.length-1||busy} onClick={()=>move(i,1)} type="button"><ArrowDown size={17}/></button>
+     </div>;
+    })}</div>
+   </div>}
+  <div className="app-savebar">
+    <span>{dirty?"Alterações não publicadas":"Galeria salva"}</span>
+    <button type="button" disabled={!dirty||busy} onClick={()=>void publish()}>
+     {busy?<LoaderCircle size={16} className="app-spin"/>:null}
+     {confirmEmpty?"Confirmar galeria vazia":"Publicar seleção"}
+    </button>
+  </div>
+  {feedback&&<p className="app-feedback" role="status">{feedback}</p>}
  </section>;
 }
