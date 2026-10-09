@@ -122,7 +122,7 @@ export function AdminSiteMedia(){
       <button type="button" aria-label="Fechar" disabled={busy} onClick={()=>setCurrent(null)}><X/></button>
     </header>
     <div className="app-compare">
-     <div><span>Agora</span><img src={visual(selected,selectedActual)} alt="Imagem atualmente usada" loading="lazy"/></div>
+     <div><span>Agora</span><img src={visual(selected,selectedActual??undefined)} alt="Imagem atualmente usada" loading="lazy"/></div>
      <div><span>Escolhida</span><div className="app-compare-new">
        <img src={chosen?imageUrl(chosen.published_storage_path):original?.src} alt="Imagem que será usada"/>
        {present?.overlay&&caption.trim()&&<b className="app-compare-caption">{caption.trim()}</b>}
