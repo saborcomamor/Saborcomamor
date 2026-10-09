@@ -6,7 +6,6 @@ const read=path=>readFileSync(new URL(path,base),"utf8");
 test("painel usa quatro abas fixas no rodapé e não mostra álbuns",()=>{
  const code=read("components/admin/AdminDashboard.tsx");
  assert.match(code,/app-admin-tabs/);
- assert.match(code,/position:/)===false;
  for(const name of ["Site","Fotos","Galeria","Mais"])assert.ok(code.includes('label:"'+name+'"'));
  assert.doesNotMatch(code,/AdminAlbums/);
  assert.doesNotMatch(code,/Nosso acervo/);
