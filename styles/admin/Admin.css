@@ -1,1 +1,47 @@
 .admin-shell{padding-top:100px;padding-bottom:100px;min-height:65svh}.admin-panel{width:100%;max-width:760px;margin-inline:auto;padding:clamp(22px,5vw,42px);background:#faf7f1;border:1px solid #e4d7c9;border-radius:18px}.admin-panel h1,.admin-panel h2{font-family:var(--serif);margin:0 0 16px}.admin-panel h1{font-size:clamp(2.6rem,8vw,4.5rem)}.admin-panel h2{font-size:clamp(2rem,6vw,3.1rem)}.admin-panel p{color:var(--muted);margin:0 0 16px}.admin-heading{display:flex;gap:18px;align-items:start;justify-content:space-between;margin-bottom:22px}.admin-heading h1{font-family:var(--serif);font-size:clamp(2.5rem,8vw,4.5rem)}.admin-heading button,.admin-tabs button,.admin-panel button{border:1px solid var(--coffee);border-radius:40px;background:var(--coffee);color:#fff;padding:11px 18px;cursor:pointer;font-size:.9rem}.admin-panel button:disabled{opacity:.55;cursor:not-allowed}.admin-form,.admin-signin{display:flex;flex-direction:column;gap:15px}.admin-form label,.admin-signin label,.admin-service label{display:flex;flex-direction:column;gap:7px;font-weight:600;font-size:.9rem}.admin-form input:not([type=checkbox]),.admin-form textarea,.admin-form select,.admin-signin input,.admin-service textarea{border:1px solid #cab9a9;border-radius:8px;background:white;padding:12px 13px;color:#321e16;font:inherit;width:100%;max-width:100%}.admin-form input[type=file]{padding:10px;background:#fff;border:1px solid #cab9a9;border-radius:8px}.admin-tabs{display:flex;gap:8px;overflow:auto;margin-bottom:24px}.admin-tabs button{background:transparent;color:var(--coffee)}.admin-tabs button[aria-current=page]{background:var(--coffee);color:#fff}.admin-check{display:flex!important;flex-direction:row!important;align-items:center;gap:10px!important}.admin-check input{width:18px;height:18px}.admin-list{list-style:none;padding:0;margin:28px 0 0}.admin-list li{padding:14px 0;border-bottom:1px solid #e4d7c9;display:flex;align-items:center;justify-content:space-between;gap:12px}.admin-list strong,.admin-list small{display:block}.admin-list small{color:var(--muted);margin-top:4px}.admin-list button{flex-shrink:0}.admin-service{padding:25px 0;border-top:1px solid #e4d7c9;display:flex;flex-direction:column;gap:12px}.admin-service h3{margin:0}@media(max-width:500px){.admin-list li{align-items:start;flex-direction:column}.admin-heading{align-items:start}}
+
+
+/* Cadastro fotográfico em lote — mobile-first */
+.admin-photos{max-width:940px}
+.admin-photos .eyebrow{letter-spacing:.14em;font-size:.72rem;font-weight:750}
+.admin-help{background:#f4ece1;border:1px solid #e8d6c4;border-radius:14px;padding:15px 16px;margin:18px 0 27px}
+.admin-help strong{display:block;margin-bottom:9px;color:#563b30}
+.admin-help p{font-size:.88rem;line-height:1.55;margin-bottom:7px}
+.admin-help p:last-child{margin-bottom:0}
+.admin-upload-form{gap:16px}
+.admin-step-heading{display:flex;gap:12px;align-items:start;margin-top:13px}
+.admin-step-heading>span{flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:#583c30;color:#fff;display:grid;place-items:center;font-weight:700}
+.admin-step-heading h3{font-family:var(--serif);font-size:clamp(1.5rem,4vw,2rem);margin:0;line-height:1.13}
+.admin-step-heading p{font-size:.86rem;margin:6px 0 0}
+.admin-field-hint{font-size:.84rem;line-height:1.5;margin:-5px 0 4px!important}
+.admin-hint-warning{border-left:3px solid #b87655;background:#fff4e8;padding:12px;border-radius:6px;font-size:.87rem}
+.admin-file-picker{position:relative;display:flex!important;flex-direction:column;gap:5px!important;align-items:center;text-align:center;padding:28px 18px;min-height:120px;border-radius:15px;border:2px dashed #b87655;background:#fff9f3;cursor:pointer;font-weight:400!important}
+.admin-file-picker .admin-file-picker-title{font-size:1.08rem;font-weight:700;color:#583c30}
+.admin-file-picker span:last-of-type{font-size:.78rem;color:#675448}
+.admin-file-picker input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;padding:0;margin:0}
+.admin-file-picker:focus-within{outline:3px solid #b87655;outline-offset:3px}
+.admin-queue-heading,.admin-photo-item-title,.admin-photo-item-footer{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.admin-queue-heading{flex-wrap:wrap}
+.admin-panel button.admin-subtle-button{background:transparent;color:#583c30;border:1px solid #bfa998;padding:8px 12px;font-size:.77rem}
+.admin-photo-queue{display:grid;grid-template-columns:1fr;gap:12px}
+.admin-photo-item{min-width:0;display:grid;grid-template-columns:108px minmax(0,1fr);gap:12px;background:#fff;border:1px solid #e4d7c9;border-radius:13px;padding:10px}
+.admin-photo-thumb{width:100%;height:108px;object-fit:cover;border-radius:9px;background:#e8ded2}
+.admin-photo-fields{display:flex;flex-direction:column;min-width:0;gap:8px}
+.admin-photo-item-title{align-items:start;flex-wrap:wrap}
+.admin-photo-item-title strong{font-size:.82rem;overflow-wrap:anywhere;max-width:100%}
+.admin-photo-item-title span{white-space:nowrap;font-size:.72rem;color:#736154}
+.admin-photo-item-footer{align-items:center;flex-wrap:wrap}
+.admin-photo-item-footer small{font-size:.79rem;color:#675448;overflow-wrap:anywhere}
+.admin-photo-extra{border-top:1px solid #f1e8dd;padding-top:6px}
+.admin-photo-extra summary{cursor:pointer;color:#583c30;font-size:.79rem;font-weight:700}
+.admin-photo-extra label{margin-top:10px;font-size:.77rem;line-height:1.45}
+.admin-photo-extra input{font-size:.84rem!important;padding:9px!important}
+.admin-check{align-items:start!important;font-size:.89rem!important;font-weight:500!important;line-height:1.45}
+.admin-check input{margin-top:4px;flex:none}
+.admin-check small{font-weight:400;color:#716258}
+.admin-batch-progress{background:#fff4e8;border-radius:10px;padding:14px;font-weight:600;color:#583c30}
+.admin-batch-progress progress{width:100%;height:13px;accent-color:#85866b;display:block;margin-top:10px}
+.admin-upload-feedback{background:#f4ece1;padding:15px;border-radius:10px;margin-top:15px!important;line-height:1.5}
+.admin-uploaded-list{margin-top:34px}
+.admin-uploaded-list h3{font-family:var(--serif);font-size:2rem}
+@media(max-width:540px){.admin-panel.admin-photos{padding:18px 15px;border-radius:14px}.admin-photo-item{grid-template-columns:86px minmax(0,1fr);gap:10px}.admin-photo-thumb{height:86px}.admin-file-picker{padding:26px 12px}.admin-panel button.admin-subtle-button{padding:7px 10px}}
