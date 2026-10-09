@@ -20,7 +20,7 @@ export default function manifest():MetadataRoute.Manifest{
   icons:[
    {src:"/pwa-icon-192.png",sizes:"192x192",type:"image/png",purpose:"any"},
    {src:"/pwa-icon-512.png",sizes:"512x512",type:"image/png",purpose:"any"},
-   {src:"/pwa-icon-maskable.png",sizes:"512x512",type:"image/png",purpose:"maskable"}
+   {src:"/pwa-icon-maskable.png?v=2",sizes:"512x512",type:"image/png",purpose:"maskable"}
   ]
  };
 }

@@ -30,7 +30,7 @@ function rememberDismissal(){
  try{window.localStorage.setItem(DISMISS_UNTIL,String(Date.now()+DISMISS_MS));}catch{}
 }
 function welcomeSequenceActive(){
- return !!document.querySelector(".photo-intro,.splash-intro-second:not(.photo-intro-underlay)");
+ return !!document.querySelector(".photo-intro");
 }
 
 export function InstallAppPrompt(){
