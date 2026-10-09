@@ -25,3 +25,10 @@ O desenvolvedor não consegue **forçar** a caixa nativa de instalação no carr
 ## Cuidados de segurança
 
 O service worker não intercepta navegação `/admin` nem `/api` e nunca cacheia respostas de autenticação, JSON de fotos ou conteúdo pessoal. Cache estático tem versão, limpa versões anteriores e não impede revalidação de páginas.
+
+
+## Ajuste da abertura nativa (v2)
+
+O Android mostra um splash nativo enquanto abre um PWA standalone; não é possível suprimi-lo por HTML/CSS mantendo o aplicativo instalável. O ícone foi reduzido e alterado para fundo creme no mesmo tom do background, removendo o círculo marrom gigante do design. URLs dos ícones ganharam `?v=2` para incentivar atualização.
+
+A tela extra em HTML (logo/boas-vindas) também foi retirada: a pilha fotográfica termina diretamente na Home. Dispositivos que instalaram a versão antiga podem continuar exibindo o ícone anterior até o WebAPK atualizar; para conferir imediatamente, remover o atalho/app anterior e instalar novamente pelo Chrome.

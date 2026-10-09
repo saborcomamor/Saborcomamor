@@ -18,7 +18,7 @@ export async function generateMetadata():Promise<Metadata>{
  const custom=base&&/^favicons\/[a-z0-9-]+\.png$/.test(path)
    ?base+"/storage/v1/object/public/sabor-identidade/"+path+"?v="+encodeURIComponent(visual.favicon_version)
    :"/default-favicon.svg";
- return {...metadataBase,icons:{icon:[{url:custom,type:custom.endsWith(".svg")?"image/svg+xml":"image/png"}],apple:[{url:"/pwa-icon-192.png",sizes:"192x192",type:"image/png"}]}};
+ return {...metadataBase,icons:{icon:[{url:custom,type:custom.endsWith(".svg")?"image/svg+xml":"image/png"}],apple:[{url:"/pwa-icon-192.png?v=2",sizes:"192x192",type:"image/png"}]}};
 }
 export const viewport:Viewport={width:"device-width",initialScale:1,themeColor:"#F6EFE5"};
 export default async function RootLayout({children}:Readonly<{children:React.ReactNode}>){

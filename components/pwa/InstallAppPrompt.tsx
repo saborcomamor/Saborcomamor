@@ -30,7 +30,7 @@ function rememberDismissal(){
  try{window.localStorage.setItem(DISMISS_UNTIL,String(Date.now()+DISMISS_MS));}catch{}
 }
 function welcomeSequenceActive(){
- return !!document.querySelector(".photo-intro,.splash-intro-second:not(.photo-intro-underlay)");
+ return !!document.querySelector(".photo-intro");
 }
 
 export function InstallAppPrompt(){
@@ -140,7 +140,7 @@ export function InstallAppPrompt(){
  return <aside ref={ref} className="pwa-install-card" role="dialog" aria-modal="false"
   aria-labelledby="pwa-install-title" aria-describedby="pwa-install-description">
   <div className="pwa-install-top">
-   <img className="pwa-install-appicon" src="/pwa-icon-192.png" alt="Ícone do Sabor com Amor"/>
+   <img className="pwa-install-appicon" src="/pwa-icon-192.png?v=2" alt="Ícone do Sabor com Amor"/>
    <div className="pwa-install-title-group">
     <span className="pwa-install-eyebrow">UM CONVITE ESPECIAL</span>
     <h2 id="pwa-install-title">Sabor com Amor <em>no seu celular.</em></h2>

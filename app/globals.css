@@ -1,7 +1,6 @@
 /* Um arquivo de CSS por seção e arquivos comuns separados. */
 @import "../styles/Base.css";
 @import "../styles/Header.css";
-@import "../styles/home/SplashIntro.css";
 @import "../styles/home/PhotoIntro.css";
 @import "../styles/home/HomeWave.css";
 @import "../styles/home/CinematicHero.css";
