@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 const read=(path)=>readFileSync(new URL("../"+path,import.meta.url),"utf8");
 
-test("fotos entram sozinhas em pilha e um único gesto revela a segunda overlay",()=>{
+test("fotos entram em pilha e um gesto revela diretamente a Home, sem splash extra",()=>{
  const component=read("components/home/SplashIntro.tsx");
  const css=read("styles/home/PhotoIntro.css");
  assert.match(component,/frames\.map\(\(frame,index\)/);
@@ -11,9 +11,10 @@ test("fotos entram sozinhas em pilha e um único gesto revela a segunda overlay"
  assert.match(component,/setReady\(true\)/);
  assert.match(component,/releaseStack/);
  assert.match(component,/onPointerUp/);
- assert.match(component,/setStage\("original"\)/);
- assert.match(component,/photo-intro-underlay/);
- assert.match(component,/sabor-intro-v4-complete/);
+ assert.match(component,/finish\(\)/);
+ assert.doesNotMatch(component,/splash-intro-second|photo-intro-underlay|setStage\("original"\)/);
+ assert.match(css,/background:transparent/);
+ assert.match(component,/sabor-intro-v5-complete/);
  assert.match(component,/Arraste para o lado/);
  assert.doesNotMatch(component,/setActive\(i=>i\+1\)|setActive\(active\+1\)|>Continuar</);
  assert.match(css,/photo-intro-arrive/);
