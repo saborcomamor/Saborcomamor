@@ -219,3 +219,11 @@
  .app-admin-root .app-intro-actions .app-intro-secondary a{font-size:.74rem}
  .app-admin-root .app-intro-actions .app-intro-save.app-primary{padding:10px 11px;font-size:.78rem}
 }
+
+/* CMS controls for the rotating portfolio: cover = first item in the published order. */
+.app-gallery-editor-hint{font-size:.78rem;line-height:1.55;color:#806a59;margin:4px 0 14px}
+.app-gallery-item-tools{display:flex;align-items:center;gap:5px;min-width:0}
+.app-gallery-item-tools .app-frame-button{min-width:0;flex:1;padding:6px 3px}
+.app-gallery-cover-action{flex:1;min-width:0;border:1px solid #c9ae96;background:#fffaf4;color:#674536;border-radius:7px;padding:6px 3px;font-size:.7rem;line-height:1.2}
+.app-gallery-cover-indicator{font-size:.71rem;color:#77543e;border:1px solid #d4b9a1;border-radius:7px;padding:6px 8px;white-space:nowrap}
+@media(max-width:365px){.app-gallery-item-tools{flex-wrap:wrap}.app-gallery-item-tools button{flex-basis:100%}}

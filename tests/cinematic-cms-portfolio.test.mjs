@@ -36,8 +36,8 @@ test("home revisada preserva copy e remove ícones aleatórios",()=>{
 
 test("galeria animada utiliza apenas seleção pública e não mostra rótulos",()=>{
  const comp=read("components/gallery/GalleryCollection.tsx");
- assert.match(comp,/gallery-fullscreen/);
- assert.match(comp,/gallery-fullscreen-photo/);
+ assert.match(comp,/gallery-rotor-stage/);
+ assert.match(comp,/gallery-rotor-card/);
  assert.doesNotMatch(comp,/gallery-film-track|gallery-photo-editorial/);
  assert.doesNotMatch(comp,/filters\.map|gallery-count|gallery-filters/);
  assert.match(read("lib/supabase/public.ts"),/gallery_entries/);

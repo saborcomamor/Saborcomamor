@@ -31,10 +31,10 @@ test("manifesto permite fontes no CMS e revela textos conforme scroll",()=>{
  assert.match(read("components/admin/AdminVisualSettings.tsx"),/visual_settings/);
 });
 
-test("galeria fullscreen apresenta somente itens selecionados sem duplicar faixa",()=>{
+test("galeria 3D mostra apenas seleção publicada sem mosaicos repetidos",()=>{
  const component=read("components/gallery/GalleryCollection.tsx");
  assert.match(component,/items\[shownIndex\]/);
- assert.match(component,/gallery-fullscreen-photo/);
+ assert.match(component,/gallery-rotor-card/);
  assert.doesNotMatch(component,/\.\.\.film|gallery-film-track|gallery-photo-editorial/);
  assert.match(read("lib/supabase/public.ts"),/from\("gallery_entries"\)/);
  assert.doesNotMatch(read("lib/supabase/public.ts"),/from\("photos"\)|uploaded\.length\?/);
@@ -75,4 +75,33 @@ test("carrosséis dos arquivos ZIP foram adaptados com créditos MIT",()=>{
  assert.match(read("components/home/CurvedEventGallery.tsx"),/File-drawer/i);
  assert.match(read("docs/THIRD_PARTY_CAROUSELS.md"),/Copyright \(c\) 2026 Vivi Tseng/);
  assert.doesNotMatch(read("components/gallery/GalleryTiltedPicker.tsx"),/images\.unsplash\.com/);
+});
+
+test("carrossel rotativo 3D e reflexo editorial respeitam layout, movimento e acessibilidade",()=>{
+ const gallery=read("components/gallery/GalleryCollection.tsx");
+ const css=read("styles/gallery/Portfolio.css");
+ const editor=read("components/admin/AdminGallery.tsx");
+ assert.match(gallery,/offsetFor/);
+ assert.match(css,/rotateY\(var\(--rotor-ry\)\)/);
+ assert.match(gallery,/gallery-rotor-reflection/);
+ assert.match(gallery,/gallery-rotor-gloss/);
+ assert.match(gallery,/SWIPE_THRESHOLD/);
+ assert.match(gallery,/AUTOPLAY_MS/);
+ assert.match(gallery,/gallery-rotor-lightbox/);
+ assert.match(gallery,/setOpenIndex/);
+ assert.match(gallery,/window\.matchMedia/);
+ assert.match(gallery,/readLatestGallery/);
+ assert.match(gallery,/items\.map\(/);
+ assert.match(gallery,/Math\.abs\(card\.offset\)<=2/);
+ assert.match(gallery,/objectFit:item\.fit_mode/);
+ assert.match(gallery,/item\.focus_x/);
+ assert.match(gallery,/item\.zoom/);
+ assert.match(css,/perspective:1250px/);
+ assert.match(css,/gallery-rotor-card\.is-current/);
+ assert.match(css,/prefers-reduced-motion/);
+ assert.doesNotMatch(gallery,/gallery-fullscreen-backdrop|gallery-film-track|grid-template-columns/);
+ assert.doesNotMatch(css,/gallery-fullscreen-backdrop|gallery-film-track/);
+ assert.match(editor,/Definir capa/);
+ assert.match(editor,/move\(pos,0\)/);
+ assert.match(editor,/publish_gallery_layout/);
 });

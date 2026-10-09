@@ -1,16 +1,233 @@
-/* Fullscreen portfolio using the exact gallery_entries selection; portrait-aware original aspect ratio. */
-.public-gallery{padding:0;background:#211811;min-height:85svh}
-.gallery-fullscreen{position:relative;isolation:isolate;width:100%;height:calc(100svh - 112px);min-height:480px;max-height:1200px;overflow:hidden;background:#281b15;touch-action:pan-y}
-.gallery-fullscreen-backdrop{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(28px) brightness(.45);transform:scale(1.12);opacity:.8;z-index:-1}
-.gallery-fullscreen-stage{height:100%;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.gallery-fullscreen-photo{display:block;width:100%;height:100%;will-change:opacity;animation:gallery-cinema-arrive .8s ease-out both}
-.gallery-fullscreen-controls{position:absolute;z-index:4;bottom:clamp(23px,5vh,52px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:11px;background:#25170fa8;backdrop-filter:blur(10px);padding:9px;border-radius:50px}
-.gallery-fullscreen-controls button{display:grid;place-items:center;border:1px solid #ffffff81;width:42px;height:42px;border-radius:50%;background:#ffffff16;color:white;cursor:pointer}
-.gallery-fullscreen-controls button:focus-visible{outline:3px solid #f7c4a2;outline-offset:3px}
-.gallery-tilted-dock{position:absolute;left:0;right:0;bottom:106px;z-index:6;display:flex;align-items:center;gap:9px;padding:18px 24px;overflow-x:auto;scrollbar-width:thin;background:linear-gradient(0deg,#1d130ed6,#2517105b);perspective:750px;overscroll-behavior-inline:contain}
-.gallery-tilted-card{flex:0 0 clamp(75px,18vw,130px);height:clamp(92px,23vw,170px);padding:0;border:2px solid transparent;background:#a98a74;border-radius:9px;overflow:hidden;transform:perspective(600px) rotateY(var(--card-angle)) scale(.92);transition:transform .5s ease,border-color .5s ease;cursor:pointer}
-.gallery-tilted-card.active{border-color:#fff9;transform:perspective(600px) rotateY(0deg) scale(1)}
-.gallery-tilted-card img{display:block;width:100%;height:100%;object-fit:cover}
-@keyframes gallery-cinema-arrive{from{opacity:.58;filter:blur(5px)}to{opacity:1;filter:blur(0)}}
-@media(max-width:600px){.gallery-fullscreen{height:calc(100svh - 96px);min-height:500px}.gallery-tilted-dock{bottom:94px;padding-inline:12px;gap:5px}.gallery-fullscreen-controls{bottom:22px}}
-@media(prefers-reduced-motion:reduce){.gallery-fullscreen-photo{animation:none}.gallery-tilted-card{transition:none}}
+/* Sabor com Amor — editorial rotating portfolio, no grids or media-player panel.
+   A rotating 3D pagination layout meets a restrained photographic reflective card. */
+.public-gallery{
+ width:100%;padding:0;overflow:hidden;background:#f7f0e7;color:#3a2b25;
+}
+.gallery-rotor{
+ position:relative;isolation:isolate;width:100%;
+ min-height:calc(100svh - 94px);
+ overflow:hidden;
+ background:
+  radial-gradient(ellipse 68% 32% at 48% 48%,rgba(231,206,179,.42),transparent 82%),
+  radial-gradient(ellipse 58% 48% at 95% 80%,rgba(207,186,157,.13),transparent 74%),
+  #f7f0e7;
+ padding:clamp(30px,5.7vw,72px) 0 35px;
+}
+.gallery-rotor::before{
+ content:"";pointer-events:none;position:absolute;inset:-15%;
+ z-index:-1;opacity:.6;
+ background:radial-gradient(circle at 24% 39%,rgba(255,255,255,.88),transparent 29%);
+}
+.gallery-rotor-heading{
+ text-align:center;width:min(860px,calc(100% - 48px));margin:0 auto;
+ position:relative;z-index:12;
+}
+.gallery-rotor-eyebrow{
+ display:block;color:#99735a;font-size:.65rem;font-weight:700;
+ letter-spacing:.23em;line-height:1.4;margin-bottom:13px;
+}
+.gallery-rotor-heading h1{
+ max-width:800px;margin:auto;
+ font-family:var(--serif);font-weight:400;line-height:1.05;
+ font-size:clamp(2.7rem,6.4vw,5.7rem);letter-spacing:-.047em;
+ text-wrap:balance;
+}
+.gallery-rotor-heading h1 em{color:#ad7659;font-style:italic;font-weight:400;}
+.gallery-rotor-heading p{
+ font-size:clamp(.8rem,1.25vw,.97rem);line-height:1.6;
+ color:#77685c;margin:13px auto 0;
+}
+.gallery-rotor-stage{
+ position:relative;isolation:isolate;
+ height:clamp(390px,69svh,780px);
+ width:100%;margin-top:-4px;
+ overflow:hidden;touch-action:pan-y;
+ outline-offset:-8px;cursor:grab;
+}
+.gallery-rotor-stage:active{cursor:grabbing}
+.gallery-rotor-stage:focus-visible{outline:2px solid #b87655;outline-offset:-5px}
+.gallery-rotor-halo{
+ position:absolute;z-index:-1;left:50%;top:44%;
+ width:min(72vw,900px);height:74%;
+ border-radius:50%;transform:translate(-50%,-50%);
+ background:radial-gradient(ellipse at center,rgba(247,224,203,.78) 0%,rgba(249,238,223,.4) 48%,transparent 76%);
+ filter:blur(13px);pointer-events:none;
+}
+.gallery-rotor-ground{
+ position:absolute;z-index:-1;left:14%;right:14%;bottom:6%;
+ height:12%;border-radius:50%;
+ background:radial-gradient(ellipse at center,rgba(101,66,46,.13),transparent 72%);
+ filter:blur(21px);pointer-events:none;
+}
+.gallery-rotor-perspective{
+ position:absolute;inset:0;perspective:1250px;
+ perspective-origin:50% 48%;transform-style:preserve-3d;pointer-events:none;
+}
+.gallery-rotor-card{
+ --tilt-x:0deg;--tilt-y:0deg;--shine-x:32%;
+ display:block;position:absolute;top:45%;left:50%;padding:0;border:0;
+ border-radius:12px;background:none;color:inherit;
+ overflow:visible;transform-style:preserve-3d;pointer-events:auto;
+ transform:translate(-50%,-50%)
+ translate3d(var(--rotor-x),var(--rotor-y),var(--rotor-z))
+ rotateY(var(--rotor-ry)) scale(var(--rotor-scale));
+ transition:transform .97s cubic-bezier(.22,.82,.2,1),
+ opacity .83s ease,filter .83s ease;
+ backface-visibility:hidden;cursor:pointer;
+ outline-offset:8px;
+}
+.gallery-rotor-card.is-side{filter:saturate(.72) brightness(.92)}
+.gallery-rotor-card.is-current{filter:saturate(1);cursor:zoom-in}
+.gallery-rotor-card.is-side:hover{filter:saturate(1) brightness(1)}
+.gallery-rotor-card:focus-visible{outline:3px solid #b87655}
+.gallery-rotor-surface{
+ display:block;width:100%;height:100%;
+ border-radius:12px;
+ box-shadow:
+  0 27px 62px rgba(69,42,25,.19),
+  0 3px 12px rgba(66,42,29,.10),
+  0 0 0 1px rgba(255,249,240,.53);
+ background:#e6d7c6;
+ overflow:hidden;position:relative;
+ transform:perspective(1100px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+ transform-style:preserve-3d;
+ transition:transform .30s ease,box-shadow .5s ease;
+}
+.gallery-rotor-card.is-current .gallery-rotor-surface{
+ box-shadow:0 38px 75px rgba(69,42,25,.27),
+ 0 12px 20px rgba(66,42,29,.10),0 0 0 1px rgba(255,249,240,.72);
+}
+.gallery-rotor-image-box{display:block;position:absolute;inset:0;overflow:hidden}
+.gallery-rotor-image-box img{
+ display:block;width:100%;height:100%;
+ background:#e5d5c2;
+ -webkit-user-drag:none;user-select:none;
+}
+.gallery-rotor-gloss{
+ pointer-events:none;position:absolute;z-index:2;inset:0;
+ background:linear-gradient(114deg,
+ transparent 13%,rgba(255,255,255,.075) 25%,
+ rgba(255,250,236,.21) 44%,rgba(255,255,255,.075) 51%,transparent 67%);
+ background-size:235% 100%;
+ background-position:var(--shine-x) 50%;
+ opacity:.65;mix-blend-mode:screen;
+ transition:background-position .25s ease,opacity .4s ease;
+}
+.gallery-rotor-card.is-side .gallery-rotor-gloss{opacity:.23}
+.gallery-rotor-enlarge{
+ pointer-events:none;position:absolute;right:13px;bottom:14px;z-index:3;
+ display:grid;place-items:center;width:37px;height:37px;
+ background:rgba(48,30,22,.35);color:#fff;border:1px solid rgba(255,255,255,.72);
+ backdrop-filter:blur(9px);border-radius:50%;
+ opacity:0;transform:translateY(6px);
+ transition:opacity .25s,transform .25s;
+}
+.gallery-rotor-card.is-current:hover .gallery-rotor-enlarge,
+.gallery-rotor-card.is-current:focus-visible .gallery-rotor-enlarge{
+ opacity:1;transform:translateY(0);
+}
+.gallery-rotor-reflection{
+ display:block;pointer-events:none;position:absolute;top:calc(100% + 12px);
+ left:2.5%;width:95%;height:25%;
+ border-radius:11px;object-fit:cover;object-position:center top;
+ transform:scaleY(-1);opacity:.13;
+ filter:blur(5px) saturate(.62);
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.18) 27%,transparent 100%);
+ mask-image:linear-gradient(to bottom,rgba(0,0,0,.65),transparent 100%);
+}
+.gallery-rotor-navigation{
+ display:flex;position:relative;z-index:12;
+ align-items:center;justify-content:center;gap:clamp(13px,3vw,25px);
+ width:min(550px,calc(100% - 44px));margin:-3px auto 0;
+}
+.gallery-rotor-arrow{
+ display:grid;place-items:center;flex:0 0 auto;
+ width:43px;height:43px;border-radius:50%;
+ border:1px solid #c9ad96;background:transparent;color:#4c382c;
+ transition:background .25s,transform .25s;
+}
+.gallery-rotor-arrow:hover{background:#e9d8c6;transform:translateY(-2px)}
+.gallery-rotor-progress{
+ display:flex;align-items:center;justify-content:center;gap:12px;min-width:120px;
+ font-family:var(--sans);font-size:.75rem;letter-spacing:.12em;color:#947665;
+ font-variant-numeric:tabular-nums;
+}
+.gallery-rotor-current-number{color:#543b2f;font-size:1rem;font-weight:700}
+.gallery-rotor-track{
+ position:relative;display:block;flex:1;height:2px;min-width:48px;
+ background:#d9c5b0;border-radius:9px;overflow:hidden;
+}
+.gallery-rotor-track>span{
+ position:absolute;inset:0 auto 0 0;background:#ae785a;
+ transition:width .8s cubic-bezier(.22,.82,.2,1);
+}
+.gallery-rotor-autoplay{
+ display:grid;place-items:center;flex:0 0 auto;
+ width:39px;height:39px;margin-left:4px;border:0;border-radius:50%;
+ color:#775948;background:transparent;
+}
+.gallery-rotor-autoplay:hover{background:#eadbcd}
+.gallery-rotor-help{
+ position:relative;z-index:5;text-align:center;margin:13px 14px 0;
+ font-size:.75rem;letter-spacing:.018em;color:#8a786b;
+}
+.gallery-rotor-empty{padding:115px 24px;text-align:center;font:1.5rem/1.3 var(--serif);color:#604838}
+/* Immersive photographic lightbox with only discreet image navigation. */
+.gallery-rotor-lightbox{
+ position:fixed;z-index:1000;inset:0;display:grid;grid-template-rows:minmax(0,1fr) auto;
+ background:rgba(27,18,14,.98);color:#f8efe6;
+ touch-action:pan-y;overscroll-behavior:contain;
+}
+.gallery-rotor-close{
+ position:absolute;top:max(16px,env(safe-area-inset-top));right:16px;z-index:4;
+ display:grid;place-items:center;width:45px;height:45px;
+ border:1px solid rgba(255,255,255,.43);border-radius:50%;
+ background:rgba(43,28,23,.68);color:#fff;
+}
+.gallery-rotor-lightbox-frame{
+ min-height:0;display:grid;place-items:center;
+ padding:clamp(16px,3.5vw,42px);
+ padding-top:max(65px,calc(env(safe-area-inset-top) + 63px));
+}
+.gallery-rotor-lightbox-frame img{
+ display:block;max-width:100%;max-height:100%;height:auto;width:auto;
+ object-fit:contain;filter:none;
+ box-shadow:0 26px 75px rgba(0,0,0,.28);
+}
+.gallery-rotor-lightbox-footer{
+ display:flex;align-items:center;justify-content:center;gap:30px;
+ padding:5px 20px max(21px,env(safe-area-inset-bottom));
+ font-size:.79rem;letter-spacing:.12em;font-variant-numeric:tabular-nums;
+}
+.gallery-rotor-lightbox-footer button{
+ display:grid;place-items:center;width:43px;height:43px;border-radius:50%;
+ background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;
+}
+.gallery-rotor-lightbox button:focus-visible{
+ outline:3px solid #f1c2a2;outline-offset:3px;
+}
+@media(max-width:700px){
+ .gallery-rotor{min-height:calc(100svh - 94px);padding:37px 0 38px;}
+ .gallery-rotor-heading{width:calc(100% - 42px)}
+ .gallery-rotor-heading h1{font-size:clamp(2.35rem,10.5vw,4.2rem)}
+ .gallery-rotor-heading p{margin-top:12px;font-size:.82rem}
+ .gallery-rotor-stage{height:clamp(395px,66svh,690px);margin-top:8px}
+ .gallery-rotor-card{top:44%}
+ .gallery-rotor-halo{top:44%;width:100%;height:62%}
+ .gallery-rotor-navigation{margin:-4px auto 0;gap:13px}
+ .gallery-rotor-help{font-size:.71rem;margin-top:11px}
+ .gallery-rotor-enlarge{opacity:1;transform:none}
+ .gallery-rotor-reflection{opacity:.095;height:16%}
+}
+@media(max-width:365px){
+ .gallery-rotor-stage{height:clamp(380px,64svh,600px)}
+ .gallery-rotor-heading h1{font-size:2.15rem}
+ .gallery-rotor-navigation{gap:10px}
+ .gallery-rotor-progress{min-width:100px;gap:8px}
+ .gallery-rotor-arrow{width:40px;height:40px}
+}
+@media(prefers-reduced-motion:reduce){
+ .gallery-rotor-card,.gallery-rotor-surface,.gallery-rotor-gloss,
+ .gallery-rotor-track>span{transition:none!important}
+ .gallery-rotor-arrow:hover{transform:none}
+}
