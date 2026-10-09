@@ -4,12 +4,13 @@ import { AdminSignIn } from "./AdminSignIn";
 import { AdminAlbums } from "./AdminAlbums";
 import { AdminPhotos } from "./AdminPhotos";
 import { AdminServices } from "./AdminServices";
+import { AdminSiteMedia } from "./AdminSiteMedia";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
 
-type Panel = "albums" | "photos" | "services";
+type Panel = "site" | "albums" | "photos" | "services";
 export function AdminDashboard() {
   const [status,setStatus]=useState<"loading"|"guest"|"admin"|"config">("loading");
-  const [tab,setTab]=useState<Panel>("albums");
+  const [tab,setTab]=useState<Panel>("site");
   const check = useCallback(async () => {
     const client=getSupabaseBrowser(); if(!client){setStatus("config");return;}
     const {data:{user},error}=await client.auth.getUser();
@@ -27,10 +28,12 @@ export function AdminDashboard() {
     {status==="admin"&&<>
       <div className="admin-heading"><div><p className="eyebrow">PAINEL PRIVADO</p><h1>Nosso acervo</h1></div><button type="button" onClick={logout}>Sair</button></div>
       <nav className="admin-tabs" aria-label="Gestão do site">
+        <button aria-current={tab==="site"?"page":undefined} onClick={()=>setTab("site")}>Editar o site</button>
         <button aria-current={tab==="albums"?"page":undefined} onClick={()=>setTab("albums")}>Álbuns</button>
-        <button aria-current={tab==="photos"?"page":undefined} onClick={()=>setTab("photos")}>Fotografias</button>
+        <button aria-current={tab==="photos"?"page":undefined} onClick={()=>setTab("photos")}>Banco de fotos</button>
         <button aria-current={tab==="services"?"page":undefined} onClick={()=>setTab("services")}>Serviços</button>
       </nav>
+      {tab==="site"&&<AdminSiteMedia/>}
       {tab==="albums"&&<AdminAlbums/>}
       {tab==="photos"&&<AdminPhotos/>}
       {tab==="services"&&<AdminServices/>}
