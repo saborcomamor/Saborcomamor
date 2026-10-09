@@ -5,9 +5,10 @@ import { AdminAlbums } from "./AdminAlbums";
 import { AdminPhotos } from "./AdminPhotos";
 import { AdminServices } from "./AdminServices";
 import { AdminSiteMedia } from "./AdminSiteMedia";
+import { AdminGallery } from "./AdminGallery";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
 
-type Panel = "site" | "albums" | "photos" | "services";
+type Panel = "site" | "albums" | "photos" | "gallery" | "services";
 export function AdminDashboard() {
   const [status,setStatus]=useState<"loading"|"guest"|"admin"|"config">("loading");
   const [tab,setTab]=useState<Panel>("site");
@@ -31,11 +32,13 @@ export function AdminDashboard() {
         <button aria-current={tab==="site"?"page":undefined} onClick={()=>setTab("site")}>Editar o site</button>
         <button aria-current={tab==="albums"?"page":undefined} onClick={()=>setTab("albums")}>Álbuns</button>
         <button aria-current={tab==="photos"?"page":undefined} onClick={()=>setTab("photos")}>Banco de fotos</button>
+        <button aria-current={tab==="gallery"?"page":undefined} onClick={()=>setTab("gallery")}>Galeria pública</button>
         <button aria-current={tab==="services"?"page":undefined} onClick={()=>setTab("services")}>Serviços</button>
       </nav>
       {tab==="site"&&<AdminSiteMedia/>}
       {tab==="albums"&&<AdminAlbums/>}
       {tab==="photos"&&<AdminPhotos/>}
+      {tab==="gallery"&&<AdminGallery/>}
       {tab==="services"&&<AdminServices/>}
     </>}
   </div>;
