@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Header } from "@/components/ui/Header";
-import { Footer } from "@/components/ui/Footer";
-import { site } from "@/lib/site";
 import "./globals.css";
 import {SiteMediaProvider} from "@/lib/cms/media";
+import {SiteChrome} from "@/components/ui/SiteChrome";
 import {getPublishedMediaAssignments} from "@/lib/cms/public";
 export const metadata: Metadata = {
   title: { default: "Sabor com Amor | Buffet em Telêmaco Borba", template: "%s | Sabor com Amor" },
@@ -13,5 +11,5 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#F6EFE5" };
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
  const imageOverrides=await getPublishedMediaAssignments();
- return <html lang="pt-BR"><body><a href="#conteudo" className="skip-link">Pular para o conteúdo</a><SiteMediaProvider items={imageOverrides}><Header/><main id="conteudo">{children}</main><Footer/></SiteMediaProvider></body></html>;
+ return <html lang="pt-BR"><body><a href="#conteudo" className="skip-link">Pular para o conteúdo</a><SiteMediaProvider items={imageOverrides}><SiteChrome>{children}</SiteChrome></SiteMediaProvider></body></html>;
 }
