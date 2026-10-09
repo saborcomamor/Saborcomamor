@@ -1,4 +1,5 @@
-# Next.js SSR com o adaptador OpenNext gerenciado da Netlify
+# Next.js SSR/ISR: deixar o adaptador OpenNext administrado pela Netlify.
+# Não adicionar redirect SPA catch-all: isso quebraria as rotas dinâmicas e a API.
 [build]
 command = "npm run build"
 publish = ".next"

@@ -1,0 +1,10 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync, existsSync } from "node:fs";
+const base = new URL("../", import.meta.url);
+const read = path => readFileSync(new URL(path,base),"utf8");
+const home=["SplashIntro","CinematicHero","WarmWelcome","ExpandableServices","RotatingFoodGallery","StoryCardStack","CurvedEventGallery","ServingStyles","LivingPhotoMosaic","ClientStories","BookingSteps","FinalInvitation"];
+test("cada seção da Home tem arquivo próprio e é importada",()=>{const page=read("app/page.tsx"); for(const name of home){assert.ok(existsSync(new URL(`components/home/${name}.tsx`,base)),name);assert.ok(page.includes(`<${name}`),name)}});
+test("serviços possuem telas separadas e orçamento não persiste dados",()=>{for(const dir of ["servicos","buffet-completo","servico-de-cozinha","galeria","nossa-historia","orcamento","privacidade","termos","cookies"]) assert.ok(existsSync(new URL(`app/${dir}/page.tsx`,base)),dir);const form=read("components/quote/QuoteForm.tsx");assert.ok(form.includes("quoteSchema.safeParse"));assert.ok(!form.includes("fetch(")&&!form.includes("localStorage"))});
+test("há rotas legais e noindex antes da publicação",()=>{assert.ok(read("app/layout.tsx").includes("index: false"));assert.ok(read("app/robots.ts").includes('disallow: "/"'));assert.ok(read("app/privacidade/page.tsx").includes("LGPD"))});
+test("referências fotográficas são identificadas como ilustrativas",()=>{assert.ok(read("lib/photos.ts").includes("ilustrativas temporárias"));assert.ok(read("app/galeria/page.tsx").includes("<Notice"))});

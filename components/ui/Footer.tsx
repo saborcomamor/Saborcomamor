@@ -1,0 +1,4 @@
+import Link from "next/link";
+import { ArrowUpRight, Heart } from "lucide-react";
+import { nav, site } from "@/lib/site";
+export function Footer(){return <footer className="site-footer"><div className="footer-inner"><div><span className="eyebrow">FEITO PARA ACOLHER</span><div className="footer-logo">Sabor <em>com</em> Amor</div><p>Da nossa cozinha para as suas melhores lembranças.</p><p>{site.city}</p></div><nav aria-label="Links de rodapé">{nav.map(n=><Link key={n.href} href={n.href}>{n.label}<ArrowUpRight size={14}/></Link>)}</nav><div className="footer-legal"><Link href="/privacidade">Privacidade</Link><Link href="/termos">Termos de uso</Link><Link href="/cookies">Cookies</Link></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Sabor com Amor.</span><span>Feito com <Heart size={13} fill="currentColor"/> carinho.</span></div></footer>}

@@ -1,0 +1,2 @@
+import { Reveal } from "@/components/ui/Reveal";
+export function ServiceBenefits({items}:{items:{number:string;heading:string;body:string}[]}) {return <section className="section service-benefits container"><div className="benefit-list">{items.map((b,i)=><Reveal key={b.heading} className="benefit-item" delay={i*.08}><span>{b.number}</span><div><h3>{b.heading}</h3><p>{b.body}</p></div></Reveal>)}</div></section>}

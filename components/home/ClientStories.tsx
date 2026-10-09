@@ -1,0 +1,2 @@
+import { Reveal } from "@/components/ui/Reveal";
+export function ClientStories(){return <section className="section keepsakes-section"><div className="container"><Reveal><span className="keepsakes-flower">✳</span><span className="eyebrow">O QUE REALMENTE IMPORTA</span><h2>Que a mesa seja farta.<br/>Que os encontros sejam leves.<br/><em>Que as memórias sejam bonitas.</em></h2><p>Porque o melhor de uma festa é estar perto de quem a gente ama.</p></Reveal></div></section>}

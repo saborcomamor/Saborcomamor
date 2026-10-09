@@ -1,0 +1,6 @@
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { Photo } from "@/components/ui/Photo";
+import { Reveal } from "@/components/ui/Reveal";
+import { photo } from "@/lib/photos";
+export function StoryProfile(){return <section className="section about-story container"><Reveal><div className="about-story-photo"><Photo image={photo("p08")}/></div></Reveal><Reveal from="right"><div className="about-story-copy"><span className="eyebrow">POR TRÁS DO SABOR COM AMOR</span><h2>Prazer, <em>Marli.</em></h2><p>O Sabor com Amor nasceu de algo simples e precioso: cozinhar para a família e receber carinho em forma de elogios.</p><p>Com o tempo, essa dedicação virou um trabalho feito para estar presente em momentos especiais. Desde 2010, a trajetória reúne encontros, receitas e pessoas que fazem cada celebração valer a pena.</p><p>Hoje, queremos continuar levando para cada mesa o mesmo cuidado que existe em um almoço de família.</p><span className="about-story-note">Esta apresentação deve receber a fotografia real da Marli antes da publicação.</span><Link href="/orcamento" className="simple-link">Vamos conversar <ArrowUpRight size={18}/></Link></div></Reveal></section>}

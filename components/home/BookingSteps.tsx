@@ -1,0 +1,4 @@
+import { Reveal } from "@/components/ui/Reveal";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+const steps=[{number:"01",name:"Você conta seu sonho",desc:"Compartilhe a data, o tipo de evento e quantas pessoas espera receber."},{number:"02",name:"A gente conversa",desc:"Alinhamos o formato de serviço e as necessidades para aquele dia."},{number:"03",name:"O carinho vira preparo",desc:"Com tudo combinado, planejamos o que for necessário para a sua comemoração."}];
+export function BookingSteps(){return <section className="section steps-section"><div className="container"><SectionHeading eyebrow="SEM COMPLICAÇÕES" title={<>Planejar pode ser <em>leve.</em></>} description="Cada história é diferente. Por isso, começamos com uma boa conversa."/><div className="steps-list">{steps.map((s,i)=><Reveal key={s.number} delay={i*.1} className="step-item"><span>{s.number}</span><div><h3>{s.name}</h3><p>{s.desc}</p></div></Reveal>)}</div></div></section>}

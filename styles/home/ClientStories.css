@@ -1,0 +1,2 @@
+/* Manifesto */
+.keepsakes-section{text-align:center;color:var(--cream);background:var(--olive);padding-block:140px}.keepsakes-flower{display:block;font-size:3rem;margin-bottom:10px;animation:slow-spin 20s linear infinite}.keepsakes-section h2{font-size:clamp(2.7rem,9vw,5.5rem);margin:26px auto 22px;max-width:850px}.keepsakes-section em{color:#f2d5b9}.keepsakes-section p{max-width:400px;margin:auto;color:#f3ebdf}@keyframes slow-spin{to{transform:rotate(360deg)}}
