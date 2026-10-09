@@ -10,8 +10,10 @@ export function SplashIntro({frames}:{frames:IntroFrame[]}){
  const [drag,setDrag]=useState(0);
  const [leaving,setLeaving]=useState<null|number>(null);
  const pointer=useRef<Gesture|null>(null);
+ const focusTarget=useRef<HTMLDivElement>(null);
  const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
  const busy=useRef(false);
+ useEffect(()=>{if(stage==="photos")focusTarget.current?.focus({preventScroll:true});},[stage]);
  const finish=useCallback(()=>{
   try{sessionStorage.setItem("sabor-intro-v3-complete","1");}catch{}
   setStage(null);
@@ -72,7 +74,7 @@ export function SplashIntro({frames}:{frames:IntroFrame[]}){
   <button type="button" onClick={finish}>Entrar no site <ArrowUpRight size={16}/></button>
  </div>;
  const current=frames[active],next=frames[active+1];
- return <div className="photo-intro" role="dialog" aria-modal="true" tabIndex={0}
+ return <div ref={focusTarget} className="photo-intro" role="dialog" aria-modal="true" tabIndex={0}
   aria-label="Arraste cada fotografia para o lado. Use as setas do teclado para avançar."
   onPointerDown={down} onPointerMove={move} onPointerUp={up}
   onPointerCancel={()=>{pointer.current=null;setDrag(0);}}

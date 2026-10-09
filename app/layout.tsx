@@ -15,7 +15,7 @@ export async function generateMetadata():Promise<Metadata>{
  const path=visual.favicon_path;
  const custom=base&&/^favicons\/[a-z0-9-]+\.png$/.test(path)
    ?base+"/storage/v1/object/public/sabor-identidade/"+path+"?v="+encodeURIComponent(visual.favicon_version)
-   :"/icon.svg";
+   :"/default-favicon.svg";
  return {...metadataBase,icons:{icon:[{url:custom,type:custom.endsWith(".svg")?"image/svg+xml":"image/png"}]}};
 }
 export const viewport:Viewport={width:"device-width",initialScale:1,themeColor:"#F6EFE5"};
