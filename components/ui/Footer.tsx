@@ -25,5 +25,6 @@ export function Footer(){
    <div className="footer-legal"><Link href="/privacidade">Privacidade</Link><Link href="/termos">Termos de uso</Link><Link href="/cookies">Cookies</Link></div>
   </div>
   <div className="footer-bottom"><span>© {new Date().getFullYear()} Sabor com Amor.</span><span>Feito com <Heart size={13} fill="currentColor"/> carinho.</span></div>
+  <div className="footer-credit">Desenvolvido por <a href="https://nobron.com.br" target="_blank" rel="noopener noreferrer" aria-label="Site de Marcela Queji (abre em nova aba)">Marcela Queji</a></div>
  </footer>;
 }
