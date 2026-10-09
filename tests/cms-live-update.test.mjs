@@ -62,3 +62,8 @@ test("Storage deletion can read published files only for authorized admins",()=>
  assert.match(migration,/CREATE POLICY sabor_admin_read_published/);
  assert.match(migration,/is_site_admin/);
 });
+
+test("business name changes reach the public header and footer",()=>{
+ assert.match(read("components/ui/Header.tsx"),/useBusinessProfile/);
+ assert.match(read("components/ui/Footer.tsx"),/business.business_name/);
+});

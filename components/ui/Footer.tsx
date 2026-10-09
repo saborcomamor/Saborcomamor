@@ -11,7 +11,7 @@ export function Footer(){
  const insta=safeExternal(business.instagram),facebook=safeExternal(business.facebook);
  return <footer className="site-footer">
   <div className="footer-inner">
-   <div><span className="eyebrow">FEITO PARA ACOLHER</span><div className="footer-logo">Sabor <em>com</em> Amor</div>
+   <div><span className="eyebrow">FEITO PARA ACOLHER</span><div className="footer-logo">{business.business_name==="Sabor com Amor"?<>Sabor <em>com</em> Amor</>:business.business_name}</div>
     <p>Da nossa cozinha para as suas melhores lembranças.</p>
     <p>{business.city}</p>
     {business.email&&<p><a href={"mailto:"+business.email}>{business.email}</a></p>}
