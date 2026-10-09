@@ -1,0 +1,7 @@
+# Next.js SSR com o adaptador OpenNext gerenciado da Netlify
+[build]
+command = "npm run build"
+publish = ".next"
+
+[build.environment]
+NODE_VERSION = "22"
